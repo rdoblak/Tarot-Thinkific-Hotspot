@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Interactive Image Quiz</title>
 <style>
-  /* ============================================
-     RESET & BASE
-     ============================================ */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body {
@@ -18,12 +15,8 @@
     background: transparent;
   }
 
-  /* ============================================
-     DEBUG PANEL
-     Set DEBUG = true below to enable.
-     ============================================ */
   #debug-panel {
-    display: none; /* controlled by JS */
+    display: none;
     position: fixed;
     bottom: 0; left: 0; right: 0;
     max-height: 35vh;
@@ -71,9 +64,6 @@
   .debug-entry.info { color: #a5f3a0; }
   .debug-entry.event { color: #93c5fd; }
 
-  /* ============================================
-     MAIN CONTAINER
-     ============================================ */
   #app-container {
     position: relative;
     width: 100%;
@@ -89,7 +79,7 @@
     display: inline-block;
     max-width: 100%;
     max-height: 100%;
-    line-height: 0; /* remove inline image gap */
+    line-height: 0;
   }
 
   #base-image {
@@ -100,9 +90,6 @@
     object-fit: contain;
   }
 
-  /* ============================================
-     HOTSPOT MARKERS
-     ============================================ */
   .hotspot {
     position: absolute;
     cursor: pointer;
@@ -112,7 +99,6 @@
   .hotspot:hover { transform: scale(1.15); }
   .hotspot:active { transform: scale(0.95); }
 
-  /* Pulsing dot style (default) */
   .hotspot-dot {
     width: 28px;
     height: 28px;
@@ -123,8 +109,6 @@
     animation: pulse-ring 2s ease-out infinite;
   }
 
-  /* "Invisible" mode — hotspot area exists but is fully transparent.
-     Great for hiding clickable zones over specific parts of the image. */
   .hotspot-invisible {
     background: transparent;
     border: none;
@@ -132,7 +116,6 @@
     animation: none;
   }
 
-  /* Debug outline so you can SEE invisible hotspots while building */
   .debug-active .hotspot-invisible {
     background: rgba(239, 68, 68, 0.15);
     border: 2px dashed rgba(239, 68, 68, 0.7);
@@ -144,36 +127,121 @@
     100% { box-shadow: 0 2px 10px rgba(0,0,0,0.25), 0 0 0 0 rgba(59,130,246,0); }
   }
 
-  /* ============================================
-     QUESTION MODAL
-     ============================================ */
-  function openQuestion(index) {
-  const hs = HOTSPOTS[index];
-  dbg(`Opening question for "${hs.id}": "${hs.question}"`, 'info');
-
-  qText.textContent = hs.question;
-  qAnswers.innerHTML = '';
-  feedbackText.className = '';
-  feedbackText.textContent = '';
-  feedbackText.style.display = 'none';
-
-  // Only render answers if they exist and have items
-  if (hs.answers && hs.answers.length > 0) {
-    hs.answers.forEach((ans, ai) => {
-      const btn = document.createElement('button');
-      btn.className = 'answer-option';
-      btn.textContent = ans.text;
-      btn.addEventListener('click', () => handleAnswer(index, ai));
-      qAnswers.appendChild(btn);
-    });
+  #question-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fade-in 0.25s ease;
+  }
+  #question-overlay.visible {
+    display: flex;
   }
 
-  overlay.classList.add('visible');
-}
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
 
-  /* ============================================
-     MOBILE ADJUSTMENTS
-     ============================================ */
+  #question-box {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 28px 24px 24px;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    position: relative;
+    animation: slide-up 0.3s ease;
+  }
+
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  #question-box .close-btn {
+    position: absolute;
+    top: 10px; right: 14px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #9ca3af;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px;
+    transition: color 0.15s;
+  }
+  #question-box .close-btn:hover { color: #374151; }
+
+  #question-box h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 14px;
+    padding-right: 28px;
+    line-height: 1.35;
+  }
+
+  .answer-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    line-height: 1.4;
+  }
+  .answer-option:hover {
+    background: #eff6ff;
+    border-color: #93c5fd;
+  }
+  .answer-option.correct {
+    background: #ecfdf5;
+    border-color: #34d399;
+    color: #065f46;
+    font-weight: 600;
+  }
+  .answer-option.incorrect {
+    background: #fef2f2;
+    border-color: #fca5a5;
+    color: #991b1b;
+  }
+  .answer-option:disabled {
+    cursor: default;
+    opacity: 0.7;
+  }
+
+  #feedback-text {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    display: none;
+  }
+  #feedback-text.show { display: block; }
+  #feedback-text.correct-fb {
+    background: #ecfdf5;
+    color: #065f46;
+    border-left: 4px solid #34d399;
+  }
+  #feedback-text.incorrect-fb {
+    background: #fef2f2;
+    color: #991b1b;
+    border-left: 4px solid #f87171;
+  }
+
   @media (max-width: 480px) {
     #question-box {
       padding: 22px 18px 18px;
@@ -195,9 +263,6 @@
 </head>
 <body>
 
-<!-- =============================================
-     DEBUG PANEL (shows when DEBUG = true)
-     ============================================= -->
 <div id="debug-panel">
   <div class="debug-header">
     <span>🛠 DEBUG CONSOLE</span>
@@ -206,25 +271,15 @@
   <div id="debug-log"></div>
 </div>
 
-<!-- =============================================
-     MAIN CONTENT
-     ============================================= -->
 <div id="app-container">
   <div id="image-wrapper">
-    <!-- =============================================
-         🔧 STEP 1: Replace the src below with YOUR image URL.
-         Upload your image to Thinkific's file manager
-         or use any publicly accessible image URL.
-         ============================================= -->
+    <!-- 🔧 Replace src with your image URL -->
     <img id="base-image"
          src="https://rdoblak.github.io/Tarot-Thinkific-Hotspot/RWS_Tarot_00_Fool.jpg"
          alt="Interactive course image" />
   </div>
 </div>
 
-<!-- =============================================
-     QUESTION POPUP OVERLAY
-     ============================================= -->
 <div id="question-overlay">
   <div id="question-box">
     <button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button>
@@ -239,61 +294,31 @@
    🔧 CONFIGURATION — EDIT THESE VALUES
    ========================================================== */
 
-/**
- * DEBUG MODE
- * Set to true to see:
- *   - Colored outlines around invisible hotspots
- *   - A live debug console at the bottom of the screen
- *   - Click coordinate logging (helps you position hotspots)
- *   - Hotspot registration and event logs
- *
- * Set to false for production.
- */
 const DEBUG = true;
 
-/**
- * HOTSPOTS ARRAY
- * Each hotspot is an object defining a clickable region on your image.
- *
- * Properties:
- *   id       : unique string identifier
- *   x        : horizontal position as % from left (0-100)
- *   y        : vertical position as % from top (0-100)
- *   width    : hotspot width in px (default 28)
- *   height   : hotspot height in px (default 28)
- *   style    : "dot" (visible pulsing circle) or "invisible" (hidden clickable zone)
- *   question : the question text to display
- *   answers  : array of { text, correct, feedback }
- *
- * HOW TO FIND x/y VALUES:
- *   1. Set DEBUG = true
- *   2. Open in browser
- *   3. Click anywhere on the image
- *   4. The debug console shows the exact x% and y% — copy those values!
- */
 const HOTSPOTS = [
   {
-   {
-  id: "hotspot-2",
-  x: 47.2,
-  y: 22.1,
-  width: 36,
-  height: 36,
-  style: "dot",
-  question: "What can his facial expression and demeanor tell you?"
-  // no answers needed!
-},
+    id: "hotspot-1",
+    x: 71.2,
+    y: 19.3,
+    width: 28,
+    height: 28,
+    style: "dot",
+    question: "What do you think the pack behind him represents? What might it carry?"
+    // No answers — question only
+  },
+  {
     id: "hotspot-2",
     x: 47.2,
     y: 22.1,
     width: 25,
     height: 25,
-    style: "dot",   // visible pulsing white dot
-    question: "What can his facial expression and demeanor tell you?"
+    style: "dot",
+    question: "What can his facial expression and demeanor tell you?",
     answers: [
-      { text: "He's daydreaming and not paying attention",            correct: true, feedback: "This is potentially true." },
-      { text: "He's feeling joyful and hopeful",      correct: true,  feedback: "lala" },
-  ]
+      { text: "He's daydreaming and not paying attention", correct: true,  feedback: "This is potentially true." },
+      { text: "He's feeling joyful and hopeful",           correct: true,  feedback: "lala" }
+    ]
   },
   {
     id: "hotspot-3",
@@ -304,9 +329,9 @@ const HOTSPOTS = [
     style: "dot",
     question: "What safety measure is required here?",
     answers: [
-      { text: "Wear gloves",            correct: false, feedback: "Gloves help, but there's a more critical safety measure." },
-      { text: "Use eye protection",      correct: true,  feedback: "Correct! Eye protection is mandatory in this area." },
-      { text: "No special measures",     correct: false, feedback: "Safety is always important — there is a required measure here." },
+      { text: "Wear gloves",         correct: false, feedback: "Gloves help, but there's a more critical safety measure." },
+      { text: "Use eye protection",  correct: true,  feedback: "Correct! Eye protection is mandatory in this area." },
+      { text: "No special measures", correct: false, feedback: "Safety is always important — there is a required measure here." }
     ]
   }
 ];
@@ -327,8 +352,6 @@ function dbg(message, level = 'info') {
   entry.innerHTML = `<span class="timestamp">[${ts}]</span> ${message}`;
   debugLog.appendChild(entry);
   debugLog.scrollTop = debugLog.scrollHeight;
-
-  // Also mirror to browser console
   const consoleFn = level === 'error' ? console.error : level === 'warn' ? console.warn : console.log;
   consoleFn(`[InteractiveImage ${level.toUpperCase()}] ${message}`);
 }
@@ -353,7 +376,6 @@ const baseImage    = document.getElementById('base-image');
 const imageWrapper = document.getElementById('image-wrapper');
 
 function renderHotspots() {
-  // Remove any existing hotspots first (for re-renders on resize)
   document.querySelectorAll('.hotspot').forEach(el => el.remove());
 
   HOTSPOTS.forEach((hs, i) => {
@@ -364,24 +386,19 @@ function renderHotspots() {
     el.setAttribute('aria-label', `Question hotspot ${i + 1}`);
     el.setAttribute('tabindex', '0');
 
-    // Size
     const w = hs.width  || 28;
     const h = hs.height || 28;
     el.style.width  = w + 'px';
     el.style.height = h + 'px';
-
-    // Position: center the hotspot on the x/y point
     el.style.left = `calc(${hs.x}% - ${w / 2}px)`;
     el.style.top  = `calc(${hs.y}% - ${h / 2}px)`;
 
-    // Click handler
     el.addEventListener('click', (e) => {
       e.stopPropagation();
       dbg(`Hotspot "${hs.id}" clicked`, 'event');
       openQuestion(i);
     });
 
-    // Keyboard accessibility
     el.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -395,7 +412,6 @@ function renderHotspots() {
   });
 }
 
-// Render once image is loaded (so wrapper has correct dimensions)
 if (baseImage.complete) {
   dbg('Image already cached — rendering hotspots immediately', 'info');
   renderHotspots();
@@ -409,7 +425,6 @@ if (baseImage.complete) {
   });
 }
 
-// Re-render on resize to keep hotspots aligned
 window.addEventListener('resize', () => {
   dbg('Window resized — re-rendering hotspots', 'info');
   renderHotspots();
@@ -418,7 +433,6 @@ window.addEventListener('resize', () => {
 
 /* ==========================================================
    COORDINATE LOGGER (debug only)
-   Click anywhere on the image to log the x%/y% position.
    ========================================================== */
 imageWrapper.addEventListener('click', (e) => {
   if (!DEBUG) return;
@@ -447,13 +461,16 @@ function openQuestion(index) {
   feedbackText.textContent = '';
   feedbackText.style.display = 'none';
 
-  hs.answers.forEach((ans, ai) => {
-    const btn = document.createElement('button');
-    btn.className = 'answer-option';
-    btn.textContent = ans.text;
-    btn.addEventListener('click', () => handleAnswer(index, ai));
-    qAnswers.appendChild(btn);
-  });
+  // Only render answers if they exist and have items
+  if (hs.answers && hs.answers.length > 0) {
+    hs.answers.forEach((ans, ai) => {
+      const btn = document.createElement('button');
+      btn.className = 'answer-option';
+      btn.textContent = ans.text;
+      btn.addEventListener('click', () => handleAnswer(index, ai));
+      qAnswers.appendChild(btn);
+    });
+  }
 
   overlay.classList.add('visible');
 }
@@ -465,19 +482,16 @@ function handleAnswer(hsIndex, ansIndex) {
 
   dbg(`Answer selected: "${ans.text}" — ${ans.correct ? '✅ CORRECT' : '❌ INCORRECT'}`, ans.correct ? 'info' : 'warn');
 
-  // Disable all buttons
   buttons.forEach((btn, i) => {
     btn.disabled = true;
     if (i === ansIndex) {
       btn.classList.add(ans.correct ? 'correct' : 'incorrect');
     }
-    // Highlight the correct one if user was wrong
     if (!ans.correct && hs.answers[i].correct) {
       btn.classList.add('correct');
     }
   });
 
-  // Show feedback
   feedbackText.textContent = ans.feedback;
   feedbackText.className = `show ${ans.correct ? 'correct-fb' : 'incorrect-fb'}`;
   feedbackText.style.display = 'block';
@@ -488,12 +502,10 @@ function closeQuestion() {
   dbg('Question modal closed', 'event');
 }
 
-// Close on overlay background click
 overlay.addEventListener('click', (e) => {
   if (e.target === overlay) closeQuestion();
 });
 
-// Close on Escape key
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeQuestion();
 });
@@ -501,8 +513,6 @@ document.addEventListener('keydown', (e) => {
 
 /* ==========================================================
    IFRAME AUTO-RESIZE
-   Sends height to parent window so Thinkific can resize
-   the iframe to fit content without scrollbars.
    ========================================================== */
 function sendHeight() {
   const h = document.documentElement.scrollHeight;
@@ -510,7 +520,6 @@ function sendHeight() {
   dbg(`Sent height to parent: ${h}px`, 'info');
 }
 
-// Send on load and resize
 window.addEventListener('load', () => setTimeout(sendHeight, 200));
 window.addEventListener('resize', sendHeight);
 baseImage.addEventListener('load', () => setTimeout(sendHeight, 100));
