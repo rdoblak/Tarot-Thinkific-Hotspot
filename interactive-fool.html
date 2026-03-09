@@ -147,120 +147,29 @@
   /* ============================================
      QUESTION MODAL
      ============================================ */
-  #question-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    z-index: 500;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    animation: fade-in 0.25s ease;
-  }
-  #question-overlay.visible {
-    display: flex;
+  function openQuestion(index) {
+  const hs = HOTSPOTS[index];
+  dbg(`Opening question for "${hs.id}": "${hs.question}"`, 'info');
+
+  qText.textContent = hs.question;
+  qAnswers.innerHTML = '';
+  feedbackText.className = '';
+  feedbackText.textContent = '';
+  feedbackText.style.display = 'none';
+
+  // Only render answers if they exist and have items
+  if (hs.answers && hs.answers.length > 0) {
+    hs.answers.forEach((ans, ai) => {
+      const btn = document.createElement('button');
+      btn.className = 'answer-option';
+      btn.textContent = ans.text;
+      btn.addEventListener('click', () => handleAnswer(index, ai));
+      qAnswers.appendChild(btn);
+    });
   }
 
-  @keyframes fade-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-
-  #question-box {
-    background: #ffffff;
-    border-radius: 14px;
-    padding: 28px 24px 24px;
-    max-width: 440px;
-    width: 100%;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    position: relative;
-    animation: slide-up 0.3s ease;
-  }
-
-  @keyframes slide-up {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  #question-box .close-btn {
-    position: absolute;
-    top: 10px; right: 14px;
-    background: none;
-    border: none;
-    font-size: 22px;
-    color: #9ca3af;
-    cursor: pointer;
-    line-height: 1;
-    padding: 4px;
-    transition: color 0.15s;
-  }
-  #question-box .close-btn:hover { color: #374151; }
-
-  #question-box h3 {
-    font-size: 17px;
-    font-weight: 700;
-    color: #1f2937;
-    margin-bottom: 14px;
-    padding-right: 28px;
-    line-height: 1.35;
-  }
-
-  .answer-option {
-    display: block;
-    width: 100%;
-    text-align: left;
-    background: #f9fafb;
-    border: 2px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 12px 16px;
-    margin-bottom: 10px;
-    font-size: 15px;
-    color: #374151;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    line-height: 1.4;
-  }
-  .answer-option:hover {
-    background: #eff6ff;
-    border-color: #93c5fd;
-  }
-  .answer-option.correct {
-    background: #ecfdf5;
-    border-color: #34d399;
-    color: #065f46;
-    font-weight: 600;
-  }
-  .answer-option.incorrect {
-    background: #fef2f2;
-    border-color: #fca5a5;
-    color: #991b1b;
-  }
-  .answer-option:disabled {
-    cursor: default;
-    opacity: 0.7;
-  }
-
-  #feedback-text {
-    margin-top: 14px;
-    padding: 12px 14px;
-    border-radius: 8px;
-    font-size: 14px;
-    line-height: 1.5;
-    display: none;
-  }
-  #feedback-text.show { display: block; }
-  #feedback-text.correct-fb {
-    background: #ecfdf5;
-    color: #065f46;
-    border-left: 4px solid #34d399;
-  }
-  #feedback-text.incorrect-fb {
-    background: #fef2f2;
-    color: #991b1b;
-    border-left: 4px solid #f87171;
-  }
+  overlay.classList.add('visible');
+}
 
   /* ============================================
      MOBILE ADJUSTMENTS
@@ -364,19 +273,16 @@ const DEBUG = true;
  */
 const HOTSPOTS = [
   {
-    id: "hotspot-1",
-    x: 71.2,          //  71.2% from left edge
-    y: 19.3,          //  19.3% from top edge
-    width: 25,
-    height: 25,
-    style: "dot",   // visible pulsing white dot
-    question: "What do you think the pack behind him represents? What might it carry?",
-    answers: [
-      { text: "Things he might need on his journey",            correct: true, feedback: "This is true, but what kinds of things?" },
-      { text: "Undiscovered aspects of himself",      correct: true,  feedback: "Correct! Behind him means he isn't yet conscious of what he possesses within himself." },
-  ]
-  },
-  {
+   {
+  id: "hotspot-2",
+  x: 47.2,
+  y: 22.1,
+  width: 36,
+  height: 36,
+  style: "dot",
+  question: "What can his facial expression and demeanor tell you?"
+  // no answers needed!
+},
     id: "hotspot-2",
     x: 47.2,
     y: 22.1,
