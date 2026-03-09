@@ -367,12 +367,14 @@ const HOTSPOTS = [
     id: "hotspot-1",
     x: 71.2,          //  71.2% from left edge
     y: 19.3,          //  19.3% from top edge
-    width: 15,
-    height: 15,
-    style: "star",   // visible pulsing yellow star
+    width: 25,
+    height: 25,
+    style: "dot",   // visible pulsing white dot
     question: "What do you think the pack behind him represents? What might it carry?",
     answers: [
-    ]
+      { text: "Things he might need on his journey",            correct: true, feedback: "This is true, but what kinds of things?" },
+      { text: "Undiscovered aspects of himself",      correct: true,  feedback: "Correct! Behind him means he isn't yet conscious of what he possesses within himself." },
+  ]
   },
   {
     id: "hotspot-2",
