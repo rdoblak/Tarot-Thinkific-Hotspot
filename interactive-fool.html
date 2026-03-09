@@ -106,9 +106,15 @@
     font-size: 24px;
     line-height: 1;
     animation: pulse-scale 2s ease-in-out infinite;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 50%;
+    padding: 5px;
+    border: 2px solid rgba(255, 255, 255, 0.7);
   }
-  .hotspot-dot::after { content: '✨'; }
+  .hotspot-dot::after {
+    content: '⭐';
+    filter: drop-shadow(0 0 4px white);
+  }
 
   @keyframes pulse-scale {
     0%, 100% { transform: scale(1); }
@@ -268,7 +274,7 @@
   <div id="intro-box">
     <div class="intro-icon">🗺️</div>
     <h2>Explore the Image</h2>
-    <p>Click on the <strong>✨ star icons</strong> scattered across the image to discover questions and explore what's happening in the scene.</p>
+    <p>Click on the <strong>👁️ eye icons</strong> scattered across the image to discover questions and explore what's happening in the scene.</p>
     <button id="intro-start-btn">Let's Begin</button>
   </div>
 </div>
