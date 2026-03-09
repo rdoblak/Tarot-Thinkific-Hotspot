@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Interactive Image Hotspot</title>
+<style>
+  /* ─── Reset ─── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --star-size: 36px;
+    --star-color: #FFD166;
+    --star-glow: rgba(255, 209, 102, 0.5);
+    --popup-bg: #1a1a2e;
+    --popup-border: #FFD166;
+    --popup-text: #f0f0f0;
+    --popup-radius: 12px;
+    --debug-bar-bg: #0f0f1a;
+    --debug-text: #7fefbd;
+    --font-body: 'Segoe UI', system-ui, sans-serif;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: #111;
+    font-family: var(--font-body);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* ─── Debug Console ─── */
+  #debug-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    max-height: 180px; overflow-y: auto;
+    background: var(--debug-bar-bg);
+    border-top: 2px solid var(--debug-text);
+    padding: 8px 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: var(--debug-text);
+    z-index: 9999;
+    display: none;
+  }
+  #debug-bar.visible { display: block; }
+  #debug-bar .log-entry { padding: 2px 0; border-bottom: 1px solid rgba(127,239,189,0.1); }
+  #debug-bar .log-entry .timestamp { color: #888; margin-right: 8px; }
+  #debug-bar .log-entry.warn { color: #f4a261; }
+  #debug-bar .log-entry.error { color: #e76f51; }
+  #debug-bar .log-entry.info { color: var(--debug-text); }
+  #debug-bar .controls {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 4px; padding-bottom: 4px;
+    border-bottom: 1px solid rgba(127,239,189,0.2);
+  }
+  #debug-bar .controls button {
+    background: none; border: 1px solid var(--debug-text); color: var(--debug-text);
+    padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 10px;
+  }
+
+  /* ─── Container ─── */
+  #hotspot-container {
+    position: relative;
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  #hotspot-container img.base-image {
+    max-width: 100%; max-height: 100%;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  /* ─── Image Wrapper ─── */
+  #image-wrapper {
+    position: relative;
+    display: inline-block;
+    line-height: 0;
+  }
+
+  /* ─── Star Hotspot ─── */
+  .hotspot-star {
+    position: absolute;
+    width: var(--star-size); height: var(--star-size);
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    z-index: 10;
+    filter: drop-shadow(0 0 6px var(--star-glow));
+    transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), filter 0.25s ease;
+    padding: 0;
+  }
+  /* Invisible expanded touch target */
+  .hotspot-star::after {
+    content: '';
+    position: absolute;
+    inset: -12px;
+  }
+
+  .hotspot-star:hover {
+    transform: translate(-50%, -50%) scale(1.25);
+    filter: drop-shadow(0 0 14px var(--star-glow));
+  }
+  .hotspot-star.active {
+    transform: translate(-50%, -50%) scale(1.1) rotate(20deg);
+  }
+
+  /* Pulse ring */
+  .hotspot-star .pulse-ring {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid var(--star-color);
+    opacity: 0;
+    animation: pulse-ring 2s ease-out infinite;
+    pointer-events: none;
+  }
+  @keyframes pulse-ring {
+    0%   { transform: scale(0.8); opacity: 0.8; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+
+  .hotspot-star svg {
+    width: 100%; height: 100%;
+    fill: var(--star-color);
+    stroke: #b8860b; stroke-width: 1;
+    pointer-events: none;
+  }
+
+  /* ─── DESKTOP Popup Card (>600px) ─── */
+  .popup-card {
+    position: absolute;
+    width: 280px;
+    background: var(--popup-bg);
+    border: 2px solid var(--popup-border);
+    border-radius: var(--popup-radius);
+    padding: 20px;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px) scale(0.96);
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(.34,1.56,.64,1);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,209,102,0.1);
+  }
+  .popup-card.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+  .popup-card .popup-title {
+    font-size: 14px; font-weight: 700;
+    color: var(--star-color);
+    margin-bottom: 10px;
+    letter-spacing: 0.02em;
+  }
+  .popup-card .popup-body {
+    font-size: 13px; line-height: 1.5;
+    color: var(--popup-text);
+  }
+  .popup-card .popup-body input[type="text"],
+  .popup-card .popup-body textarea {
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 8px;
+    border: 1px solid rgba(255,209,102,0.3);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.06);
+    color: var(--popup-text);
+    font-family: var(--font-body);
+    font-size: 16px; /* 16px prevents iOS auto-zoom on focus */
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  .popup-card .popup-body input:focus,
+  .popup-card .popup-body textarea:focus {
+    border-color: var(--star-color);
+  }
+  .popup-card .popup-body textarea { resize: vertical; min-height: 60px; }
+
+  .popup-card .close-btn {
+    position: absolute; top: 8px; right: 10px;
+    background: none; border: none;
+    color: #aaa; font-size: 22px;
+    cursor: pointer; line-height: 1;
+    padding: 4px 8px;
+    /* Meets 44×44 minimum tap target */
+    min-width: 44px; min-height: 44px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .popup-card .close-btn:hover { color: #fff; }
+
+  /* ─── Mobile Overlay Backdrop ─── */
+  #mobile-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 199;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  #mobile-overlay.visible {
+    opacity: 1;
+  }
+
+  /* ═══════════════════════════════════════════════
+     MOBILE STYLES (max-width: 600px)
+     ═══════════════════════════════════════════════ */
+  @media (max-width: 600px) {
+    :root {
+      --star-size: 30px;
+    }
+
+    html, body {
+      overflow: auto;
+      height: auto;
+    }
+
+    #hotspot-container {
+      height: auto;
+      min-height: 100vh;
+      overflow: visible;
+    }
+
+    /* Popups become bottom sheets on mobile */
+    .popup-card {
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      top: auto !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      border-radius: 20px 20px 0 0;
+      padding: 24px 20px 32px;
+      transform: translateY(100%);
+      opacity: 1;
+      pointer-events: none;
+      z-index: 200;
+      max-height: 70vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      transition: transform 0.35s cubic-bezier(.32,.72,.24,1.02);
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.6);
+    }
+    .popup-card.visible {
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Drag handle indicator */
+    .popup-card::before {
+      content: '';
+      display: block;
+      width: 40px; height: 4px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 2px;
+      margin: 0 auto 16px;
+    }
+
+    .popup-card .popup-title {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    .popup-card .popup-body {
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .popup-card .close-btn {
+      top: 12px; right: 12px;
+      font-size: 24px;
+    }
+
+    /* Show overlay on mobile */
+    #mobile-overlay { display: block; }
+
+    /* Larger tap zone on mobile */
+    .hotspot-star::after {
+      inset: -16px;
+    }
+  }
+
+  /* ─── Debug Overlay Outlines ─── */
+  .hotspot-star.debug-outline {
+    outline: 2px dashed #7fefbd;
+    outline-offset: 4px;
+  }
+  .hotspot-star.debug-outline .debug-label {
+    position: absolute; top: -20px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px; color: var(--debug-text);
+    background: var(--debug-bar-bg);
+    padding: 1px 5px; border-radius: 3px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="hotspot-container">
+  <div id="image-wrapper">
+    <!-- ============================================================
+         CONFIGURATION: Replace the src below with YOUR image URL.
+         Use a publicly accessible URL (hosted on your site, S3, etc.)
+         ============================================================ -->
+    <img class="base-image" id="base-image"
+         src="https://placehold.co/900x550/1a1a2e/FFD166?text=Your+Image+Here"
+         alt="Interactive image" />
+  </div>
+</div>
+
+<!-- Mobile backdrop overlay -->
+<div id="mobile-overlay"></div>
+
+<div id="debug-bar">
+  <div class="controls">
+    <span><strong>🛠 Debug Console</strong></span>
+    <button onclick="debugManager.clear()">Clear</button>
+  </div>
+  <div id="debug-log"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+//  CONFIGURATION — EDIT THIS SECTION
+// ══════════════════════════════════════════════════════════════════
+
+/**
+ * DEBUG_MODE: set to true to enable debug logging & visual overlays.
+ * Set to false when you're satisfied everything works.
+ */
+const DEBUG_MODE = true;
+
+/**
+ * HOTSPOTS ARRAY
+ * ─────────────
+ * Each hotspot is an object:
+ *   id          : unique string identifier
+ *   x           : horizontal position as % of image width  (0–100)
+ *   y           : vertical position as % of image height   (0–100)
+ *   title       : heading shown in the popup
+ *   type        : "text"     → static text
+ *                 "input"    → single-line text input
+ *                 "textarea" → multi-line text area
+ *                 "question" → question with an input
+ *   content     : the text/question string to display
+ *   placeholder : (optional) placeholder for input/textarea
+ */
+const HOTSPOTS = [
+  {
+    id: "star-1",
+    x: 20,
+    y: 30,
+    title: "Key Concept",
+    type: "text",
+    content: "This is an informational callout. Replace this with your own content explaining a key concept."
+  },
+  {
+    id: "star-2",
+    x: 50,
+    y: 55,
+    title: "Reflection Question",
+    type: "question",
+    content: "What is the most important takeaway from this section?",
+    placeholder: "Type your answer here…"
+  },
+  {
+    id: "star-3",
+    x: 78,
+    y: 25,
+    title: "Your Notes",
+    type: "textarea",
+    content: "Jot down any thoughts or observations:",
+    placeholder: "Write your notes here…"
+  },
+  {
+    id: "star-4",
+    x: 35,
+    y: 80,
+    title: "Quick Check",
+    type: "input",
+    content: "Name one example discussed in this lesson:",
+    placeholder: "Your answer…"
+  }
+];
+
+// ══════════════════════════════════════════════════════════════════
+//  DEVICE DETECTION
+// ══════════════════════════════════════════════════════════════════
+function isMobile() {
+  return window.innerWidth <= 600;
+}
+
+function getDeviceInfo() {
+  const ua = navigator.userAgent;
+  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  return {
+    isMobile: isMobile(),
+    isTouch,
+    isIOS: /iPad|iPhone|iPod/.test(ua),
+    isAndroid: /Android/.test(ua),
+    screenW: window.innerWidth,
+    screenH: window.innerHeight,
+    dpr: window.devicePixelRatio || 1,
+    orientation: window.innerWidth > window.innerHeight ? 'landscape' : 'portrait'
+  };
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  DEBUG MANAGER
+// ══════════════════════════════════════════════════════════════════
+const debugManager = {
+  _el: null,
+  _bar: null,
+
+  init() {
+    this._bar = document.getElementById('debug-bar');
+    this._el  = document.getElementById('debug-log');
+    if (DEBUG_MODE) {
+      this._bar.classList.add('visible');
+      const info = getDeviceInfo();
+      this.log('info', 'Debug mode ENABLED. Set DEBUG_MODE = false to hide this panel.');
+      this.log('info', `Device: ${info.screenW}×${info.screenH} @ ${info.dpr}x DPR | Touch: ${info.isTouch} | Mobile layout: ${info.isMobile} | ${info.orientation}`);
+      this.log('info', `Platform: iOS=${info.isIOS}, Android=${info.isAndroid}`);
+      this.log('info', `Loaded ${HOTSPOTS.length} hotspot(s).`);
+    }
+  },
+
+  log(level, msg) {
+    if (!DEBUG_MODE) return;
+    const ts = new Date().toLocaleTimeString();
+    const entry = document.createElement('div');
+    entry.className = `log-entry ${level}`;
+    entry.innerHTML = `<span class="timestamp">[${ts}]</span> <span class="level">${level.toUpperCase()}</span> — ${msg}`;
+    this._el.appendChild(entry);
+    this._el.scrollTop = this._el.scrollHeight;
+    const consoleFn = level === 'error' ? console.error : level === 'warn' ? console.warn : console.log;
+    consoleFn(`[Hotspot ${level.toUpperCase()}]`, msg);
+  },
+
+  clear() {
+    if (this._el) this._el.innerHTML = '';
+  }
+};
+
+// ══════════════════════════════════════════════════════════════════
+//  STAR SVG
+// ══════════════════════════════════════════════════════════════════
+function starSVG() {
+  return `<span class="pulse-ring"></span>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/>
+    </svg>`;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  BUILD HOTSPOTS
+// ══════════════════════════════════════════════════════════════════
+const wrapper = document.getElementById('image-wrapper');
+const overlay = document.getElementById('mobile-overlay');
+let activePopup = null;
+let activeStar  = null;
+
+function buildPopupHTML(hs) {
+  let body = '';
+  switch (hs.type) {
+    case 'text':
+      body = `<p>${hs.content}</p>`;
+      break;
+    case 'input':
+      body = `<p>${hs.content}</p><input type="text" placeholder="${hs.placeholder || ''}" />`;
+      break;
+    case 'textarea':
+      body = `<p>${hs.content}</p><textarea placeholder="${hs.placeholder || ''}"></textarea>`;
+      break;
+    case 'question':
+      body = `<p><strong>Q:</strong> ${hs.content}</p><input type="text" placeholder="${hs.placeholder || ''}" />`;
+      break;
+    default:
+      body = `<p>${hs.content}</p>`;
+  }
+  return body;
+}
+
+function positionPopupDesktop(popup, starEl) {
+  const wrapRect = wrapper.getBoundingClientRect();
+  const starRect = starEl.getBoundingClientRect();
+  const popW = 280;
+  const popH = popup.offsetHeight || 180;
+
+  let left = (starRect.left - wrapRect.left) + starRect.width / 2 + 12;
+  let top  = (starRect.top  - wrapRect.top)  - popH / 2 + starRect.height / 2;
+
+  if (left + popW > wrapRect.width) {
+    left = (starRect.left - wrapRect.left) - popW - 12 + starRect.width / 2;
+  }
+  if (left < 4) left = 4;
+  if (top < 4) top = 4;
+  if (top + popH > wrapRect.height - 4) top = wrapRect.height - popH - 4;
+
+  popup.style.left = left + 'px';
+  popup.style.top  = top  + 'px';
+
+  debugManager.log('info', `Popup "${popup.dataset.id}" positioned (desktop) left:${Math.round(left)} top:${Math.round(top)}`);
+}
+
+function closeAllPopups() {
+  document.querySelectorAll('.popup-card.visible').forEach(p => {
+    p.classList.remove('visible');
+    p.style.transform = '';
+  });
+  document.querySelectorAll('.hotspot-star.active').forEach(s => s.classList.remove('active'));
+  overlay.classList.remove('visible');
+  activePopup = null;
+  activeStar  = null;
+  debugManager.log('info', 'All popups closed.');
+}
+
+// Swipe-down to dismiss on mobile
+function attachSwipeDismiss(popup) {
+  let touchStartY = 0;
+  let dragging = false;
+
+  popup.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+    dragging = false;
+  }, { passive: true });
+
+  popup.addEventListener('touchmove', (e) => {
+    const deltaY = e.touches[0].clientY - touchStartY;
+    if (deltaY > 10 && popup.scrollTop <= 0) {
+      dragging = true;
+      popup.style.transform = `translateY(${deltaY}px)`;
+      popup.style.transition = 'none';
+    }
+  }, { passive: true });
+
+  popup.addEventListener('touchend', (e) => {
+    popup.style.transition = '';
+    const deltaY = e.changedTouches[0].clientY - touchStartY;
+    if (dragging && deltaY > 80) {
+      closeAllPopups();
+      debugManager.log('info', `Popup "${popup.dataset.id}" dismissed via swipe-down (delta: ${Math.round(deltaY)}px).`);
+    } else if (popup.classList.contains('visible')) {
+      popup.style.transform = 'translateY(0)';
+    }
+    dragging = false;
+  }, { passive: true });
+}
+
+// Build each hotspot
+HOTSPOTS.forEach(hs => {
+  if (hs.x < 0 || hs.x > 100 || hs.y < 0 || hs.y > 100) {
+    debugManager.log('error', `Hotspot "${hs.id}" has out-of-range coordinates (x:${hs.x}, y:${hs.y}). Must be 0–100.`);
+  }
+
+  // Star element
+  const star = document.createElement('div');
+  star.className = 'hotspot-star' + (DEBUG_MODE ? ' debug-outline' : '');
+  star.dataset.id = hs.id;
+  star.style.left = hs.x + '%';
+  star.style.top  = hs.y + '%';
+  star.innerHTML  = starSVG();
+  if (DEBUG_MODE) {
+    const label = document.createElement('span');
+    label.className = 'debug-label';
+    label.textContent = hs.id;
+    star.appendChild(label);
+  }
+  star.setAttribute('role', 'button');
+  star.setAttribute('aria-label', hs.title);
+  star.setAttribute('tabindex', '0');
+
+  // Popup card
+  const popup = document.createElement('div');
+  popup.className = 'popup-card';
+  popup.dataset.id = hs.id;
+  popup.innerHTML = `
+    <button class="close-btn" aria-label="Close">&times;</button>
+    <div class="popup-title">${hs.title}</div>
+    <div class="popup-body">${buildPopupHTML(hs)}</div>
+  `;
+
+  // Mobile swipe-to-dismiss
+  attachSwipeDismiss(popup);
+
+  // Toggle logic
+  function togglePopup(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    const isOpen = popup.classList.contains('visible');
+
+    closeAllPopups();
+
+    if (!isOpen) {
+      popup.classList.add('visible');
+      star.classList.add('active');
+      activePopup = popup;
+      activeStar  = star;
+
+      if (isMobile()) {
+        overlay.classList.add('visible');
+        popup.style.transform = 'translateY(0)';
+        debugManager.log('info', `Opened "${hs.id}" as bottom-sheet (mobile, ${window.innerWidth}px wide).`);
+      } else {
+        positionPopupDesktop(popup, star);
+        debugManager.log('info', `Opened "${hs.id}" as floating card (desktop) at (${hs.x}%, ${hs.y}%).`);
+      }
+    }
+  }
+
+  star.addEventListener('click', togglePopup);
+  star.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') togglePopup(e); });
+  popup.querySelector('.close-btn').addEventListener('click', (e) => { e.stopPropagation(); closeAllPopups(); });
+  popup.addEventListener('click', (e) => e.stopPropagation());
+
+  wrapper.appendChild(star);
+  wrapper.appendChild(popup);
+
+  debugManager.log('info', `Created hotspot "${hs.id}" — type: ${hs.type}, pos: (${hs.x}%, ${hs.y}%).`);
+});
+
+// Close on outside click / overlay tap
+document.addEventListener('click', () => { if (activePopup) closeAllPopups(); });
+overlay.addEventListener('click', () => closeAllPopups());
+
+// ══════════════════════════════════════════════════════════════════
+//  RESPONSIVE: resize + orientation change
+// ══════════════════════════════════════════════════════════════════
+function handleResize() {
+  const info = getDeviceInfo();
+  debugManager.log('info', `Resize → ${info.screenW}×${info.screenH} | ${info.orientation} | Mobile: ${info.isMobile}`);
+
+  if (activePopup && activeStar) {
+    if (isMobile()) {
+      activePopup.style.left = '';
+      activePopup.style.top  = '';
+      overlay.classList.add('visible');
+      activePopup.style.transform = 'translateY(0)';
+    } else {
+      overlay.classList.remove('visible');
+      activePopup.style.transform = '';
+      positionPopupDesktop(activePopup, activeStar);
+    }
+  }
+}
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(handleResize, 150);
+});
+window.addEventListener('orientationchange', () => setTimeout(handleResize, 300));
+
+// ══════════════════════════════════════════════════════════════════
+//  IMAGE LOAD
+// ══════════════════════════════════════════════════════════════════
+const img = document.getElementById('base-image');
+img.addEventListener('load', () => {
+  debugManager.log('info', `Image loaded. Natural: ${img.naturalWidth}×${img.naturalHeight} | Rendered: ${img.clientWidth}×${img.clientHeight}`);
+});
+img.addEventListener('error', () => {
+  debugManager.log('error', 'IMAGE FAILED TO LOAD — check the src URL in the <img> tag.');
+});
+
+// ══════════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════════
+debugManager.init();
+debugManager.log('info', 'Interactive Hotspot widget initialized (mobile-ready).');
+</script>
+</body>
+</html>
