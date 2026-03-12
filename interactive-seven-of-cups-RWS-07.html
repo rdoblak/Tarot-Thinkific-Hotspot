@@ -57,13 +57,14 @@
 <div id="app-container"><div id="image-wrapper"><img id="base-image" src="https://rdoblak.github.io/Tarot-Thinkific-Hotspot/Cups07.jpg" alt="Interactive course image" /></div></div>
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 <script>
-const DEBUG = true;
+const DEBUG = false;
 const HOTSPOTS = [
   { id: "hotspot-1", x: 35.0, y: 75.0, width: 15, height: 15, style: "dot", question: "A dark silhouetted figure gazes up at seven floating cups in a cloud. What does this shadowy, undefined form suggest about the figure's state of mind?" },
-  { id: "hotspot-2", x: 30.0, y: 20.0, width: 15, height: 15, style: "dot", question: "One cup contains a glowing human head or face. What desire or fantasy might this particular vision represent?" },
-  { id: "hotspot-3", x: 50.0, y: 18.0, width: 15, height: 15, style: "dot", question: "A cup holds a shrouded, luminous figure beneath a red canopy. What does this veiled apparition suggest about hidden truths or illusions?" },
-  { id: "hotspot-4", x: 45.0, y: 45.0, width: 15, height: 15, style: "dot", question: "One cup overflows with jewels and treasure. How does this vision of material wealth relate to the card's theme of fantasy versus reality?" },
-  { id: "hotspot-5", x: 62.0, y: 42.0, width: 15, height: 15, style: "dot", question: "A cup contains a wreath of laurel with a skull beneath it. What warning about glory and its costs might this particular vision convey?" },
+  { id: "hotspot-2", x: 13.5, y: 42.8, width: 15, height: 15, style: "dot", question: "Do you recognize this shape? What do you think it means here?" },
+  { id: "hotspot-3", x: 50.0, y: 18.0, width: 15, height: 15, style: "dot", question: "This cup holds something with a different colored aura from the rest. What do you think that means?" },
+  { id: "hotspot-4", x: 71.4, y: 30.8, width: 15, height: 15, style: "dot", question: "What does it mean that all the cups are suspended in a cloud?" },
+  { id: "hotspot-5", x: 62.0, y: 45.6, width: 15, height: 15, style: "dot", question: "What do you notice is different with this cup? What might that mean?" },
+  { id: "hotspot-", x: 78.0, y: 80.6, width: 15, height: 15, style: "dot", question: "What does the absence of background elements suggest?" },
 ];
 
 document.getElementById('intro-start-btn').addEventListener('click', function() { const o = document.getElementById('intro-overlay'); o.style.transition = 'opacity 0.25s ease'; o.style.opacity = '0'; setTimeout(function() { o.style.display = 'none'; }, 260); dbg('Intro modal dismissed', 'event'); });
