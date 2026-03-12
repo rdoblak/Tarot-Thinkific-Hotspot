@@ -57,13 +57,13 @@
 <div id="app-container"><div id="image-wrapper"><img id="base-image" src="https://rdoblak.github.io/Tarot-Thinkific-Hotspot/Cups05.jpg" alt="Interactive course image" /></div></div>
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 <script>
-const DEBUG = true;
+const DEBUG = false;
 const HOTSPOTS = [
-  { id: "hotspot-1", x: 50.0, y: 35.0, width: 15, height: 15, style: "dot", question: "The cloaked figure stands with bowed head, wrapped in a long black cloak. What does this heavy, dark garment suggest about the figure's emotional state?" },
-  { id: "hotspot-2", x: 35.0, y: 72.0, width: 15, height: 15, style: "dot", question: "Three cups have fallen over, their contents spilled on the ground. What kind of loss or disappointment might these overturned cups represent?" },
-  { id: "hotspot-3", x: 65.0, y: 72.0, width: 15, height: 15, style: "dot", question: "Two cups remain standing upright behind the figure. Why is it significant that the figure does not turn to see what still remains?" },
-  { id: "hotspot-4", x: 75.0, y: 55.0, width: 15, height: 15, style: "dot", question: "A bridge crosses a river in the background leading toward a distant building. What path forward or hope might this bridge symbolize?" },
-  { id: "hotspot-5", x: 20.0, y: 55.0, width: 15, height: 15, style: "dot", question: "A castle or tower stands faintly in the far distance on the left. What stability or refuge might this structure represent for the grieving figure?" },
+  { id: "hotspot-1", x: 50.0, y: 35.0, width: 15, height: 15, style: "dot", question: "The cloaked figure stands with bowed head, wrapped in a long black cloak. What does this suggest about the figure's emotional state?" },
+  { id: "hotspot-2", x: 21.4, y: 83.5, width: 15, height: 15, style: "dot", question: "Three cups have fallen over, their contents spilled on the ground. What might these overturned cups represent?" },
+  { id: "hotspot-3", x: 78.2, y: 75.8, width: 15, height: 15, style: "dot", question: "Two cups remain standing upright behind the figure. What do you think that means in connection with the overturned cups?" },
+  { id: "hotspot-4", x: 74.9, y: 65.8, width: 15, height: 15, style: "dot", question: "A bridge crosses a river in the background leading toward a distant building. What does the bridge symbolize?" },
+  { id: "hotspot-5", x: 20.0, y: 55.0, width: 15, height: 15, style: "dot", question: "A castle or tower stands faintly in the far distance on the left. What might this structure represent for the figure?" },
 ];
 
 document.getElementById('intro-start-btn').addEventListener('click', function() { const o = document.getElementById('intro-overlay'); o.style.transition = 'opacity 0.25s ease'; o.style.opacity = '0'; setTimeout(function() { o.style.display = 'none'; }, 260); dbg('Intro modal dismissed', 'event'); });
