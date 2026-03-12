@@ -59,11 +59,10 @@
 <script>
 const DEBUG = false;
 const HOTSPOTS = [
-  { id: "hotspot-1", x: 50.0, y: 18.0, width: 15, height: 15, style: "dot", question: "Ten cups appear in a rainbow arc across the sky. What does this heavenly arrangement suggest about the divine or destined nature of this happiness?" },
-  { id: "hotspot-2", x: 35.0, y: 55.0, width: 15, height: 15, style: "dot", question: "A couple stands together with arms raised in celebration, looking up at the rainbow of cups. How does their shared joy differ from the solitary satisfaction of the Nine of Cups?" },
-  { id: "hotspot-3", x: 65.0, y: 70.0, width: 15, height: 15, style: "dot", question: "Two children dance and play beside the couple. What does their presence add to the meaning of emotional fulfillment in this card?" },
-  { id: "hotspot-4", x: 75.0, y: 55.0, width: 15, height: 15, style: "dot", question: "A cozy home with a red roof nestles among trees in the background. What does this domestic scene represent as the culmination of the Cups journey?" },
-  { id: "hotspot-5", x: 20.0, y: 65.0, width: 15, height: 15, style: "dot", question: "A winding river flows through the green landscape. How does this flowing water connect to the emotional abundance depicted throughout the scene?" },
+  { id: "hotspot-1", x: 50.0, y: 18.0, width: 15, height: 15, style: "dot", question: "Ten cups appear in a rainbow arc across the sky. What other card/s does this arrangement connect to?" },
+  { id: "hotspot-2", x: 35.0, y: 65.0, width: 15, height: 15, style: "dot", question: "A couple stands together with arms raised, looking up at the rainbow of cups. How would you interpret their emotional state?" },
+  { id: "hotspot-3", x: 65.0, y: 70.0, width: 15, height: 15, style: "dot", question: "Two children dance and play beside the couple. What does their presence add to the meaning of this card?" },
+  { id: "hotspot-4", x: 75.0, y: 55.0, width: 15, height: 15, style: "dot", question: "What can you glean from the background that adds to the meaning of this card?" },
 ];
 
 document.getElementById('intro-start-btn').addEventListener('click', function() { const o = document.getElementById('intro-overlay'); o.style.transition = 'opacity 0.25s ease'; o.style.opacity = '0'; setTimeout(function() { o.style.display = 'none'; }, 260); dbg('Intro modal dismissed', 'event'); });
