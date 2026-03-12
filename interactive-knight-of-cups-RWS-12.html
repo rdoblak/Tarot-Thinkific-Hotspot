@@ -57,13 +57,14 @@
 <div id="app-container"><div id="image-wrapper"><img id="base-image" src="https://rdoblak.github.io/Tarot-Thinkific-Hotspot/Cups12.jpg" alt="Interactive course image" /></div></div>
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 <script>
-const DEBUG = true;
+const DEBUG = false;
 const HOTSPOTS = [
-  { id: "hotspot-1", x: 55.0, y: 30.0, width: 15, height: 15, style: "dot", question: "The Knight extends a golden cup before him as he rides. How does carrying a cup rather than a sword change the nature of this knight's quest?" },
-  { id: "hotspot-2", x: 40.0, y: 15.0, width: 15, height: 15, style: "dot", question: "His helmet is adorned with wings, like the helmet of Hermes the messenger god. What does this connection to Mercury suggest about his role?" },
-  { id: "hotspot-3", x: 40.0, y: 50.0, width: 15, height: 15, style: "dot", question: "His horse moves at a slow, graceful walk rather than a gallop. How does this gentle pace contrast with the other Knights in the tarot?" },
+  { id: "hotspot-1", x: 55.0, y: 30.0, width: 15, height: 15, style: "dot", question: "What does his manner of holding the cup suggest?" },
+  { id: "hotspot-2", x: 40.0, y: 15.0, width: 15, height: 15, style: "dot", question: "What is the meaning of the decorative wings on his helmet and spurs?" },
+  { id: "hotspot-3", x: 40.0, y: 50.0, width: 15, height: 15, style: "dot", question: "What can you gather about this knight from his posture?" },
   { id: "hotspot-4", x: 45.0, y: 40.0, width: 15, height: 15, style: "dot", question: "His armor and surcoat bear red fish symbols. What might these aquatic creatures represent on a knight associated with the water element?" },
-  { id: "hotspot-5", x: 70.0, y: 80.0, width: 15, height: 15, style: "dot", question: "A river winds through the landscape behind him. How does this flowing water reinforce the emotional and intuitive energy of the Cups suit?" },
+  { id: "hotspot-5", x: 70.0, y: 80.0, width: 15, height: 15, style: "dot", question: "What does the terrain suggest?" },
+  { id: "hotspot-6", x: 67.1, y: 65.9, width: 15, height: 15, style: "dot", question: "What does the horse's deportment tell you about this card?" },
 ];
 
 document.getElementById('intro-start-btn').addEventListener('click', function() { const o = document.getElementById('intro-overlay'); o.style.transition = 'opacity 0.25s ease'; o.style.opacity = '0'; setTimeout(function() { o.style.display = 'none'; }, 260); dbg('Intro modal dismissed', 'event'); });
