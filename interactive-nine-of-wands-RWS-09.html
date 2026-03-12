@@ -58,7 +58,7 @@
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 
 <script>
-const DEBUG = true;
+const DEBUG = false;
 
 const HOTSPOTS = [
   {
@@ -68,7 +68,7 @@ const HOTSPOTS = [
     width: 15,
     height: 15,
     style: "dot",
-    question: "The figure has a bandage wrapped around his head, suggesting he has already been wounded. Despite this injury, he stands ready. What does his posture tell us about resilience?"
+    question: "The figure has a bandage wrapped around his head. How would you interpret this element?" 
   },
   {
     id: "hotspot-2",
@@ -77,7 +77,7 @@ const HOTSPOTS = [
     width: 15,
     height: 15,
     style: "dot",
-    question: "He leans on one wand while clutching it tightly, as if bracing for another attack. Is he preparing to fight again, or simply refusing to fall?"
+    question: "What can you surmise about this figure's emotional state based on his facial expression and manner of standing?"
   },
   {
     id: "hotspot-3",
@@ -86,25 +86,16 @@ const HOTSPOTS = [
     width: 15,
     height: 15,
     style: "dot",
-    question: "Eight wands stand in a row behind the figure like a fence or barricade. What might these planted wands represent — past battles, defenses, or accumulated experience?"
+    question: "Eight wands stand in a row behind the figure. What might these planted wands represent in the context of this card?"
   },
   {
     id: "hotspot-4",
-    x: 55.0,
-    y: 45.0,
+    x: 59.9,
+    y: 22.6,
     width: 15,
     height: 15,
     style: "dot",
-    question: "The figure glances over his shoulder with a wary, suspicious expression. What does this backward glance suggest about his emotional state after so many challenges?"
-  },
-  {
-    id: "hotspot-5",
-    x: 50.0,
-    y: 85.0,
-    width: 15,
-    height: 15,
-    style: "dot",
-    question: "With nine wands in the scene and only one more to go before the Ten, what does this near-completion of the numbered sequence suggest about where the figure stands in his journey?"
+    question: "One of the wands seems to have fallen to the side. What might that mean?"
   },
 ];
 
