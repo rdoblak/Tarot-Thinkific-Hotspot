@@ -59,11 +59,10 @@
 <script>
 const DEBUG = false;
 const HOTSPOTS = [
-  { id: "hotspot-1", x: 35.0, y: 30.0, width: 15, height: 15, style: "dot", question: "A small fish peeks out from inside the golden cup. What does this surprising, whimsical detail suggest about unexpected messages or creative inspiration?" },
-  { id: "hotspot-2", x: 50.0, y: 15.0, width: 15, height: 15, style: "dot", question: "The Page wears an elaborate blue beret with a long flowing scarf. What does this fanciful headwear suggest about his imaginative and artistic nature?" },
-  { id: "hotspot-3", x: 50.0, y: 45.0, width: 15, height: 15, style: "dot", question: "His tunic is decorated with floral patterns — tulips and lotus blossoms. What do these flower motifs tell us about his connection to beauty and emotion?" },
-  { id: "hotspot-4", x: 50.0, y: 85.0, width: 15, height: 15, style: "dot", question: "He stands at the edge of the sea with gentle waves lapping at his feet. What does this position between land and water symbolize about his emotional awareness?" },
-  { id: "hotspot-5", x: 55.0, y: 35.0, width: 15, height: 15, style: "dot", question: "The Page gazes at the cup with a look of gentle curiosity rather than surprise. What does this calm reaction to the unexpected reveal about his character?" },
+  { id: "hotspot-1", x: 35.0, y: 30.0, width: 15, height: 15, style: "dot", question: "A small fish peeks out from inside the golden cup. What does this surprising, whimsical detail suggest?" },
+  { id: "hotspot-2", x: 50.0, y: 15.0, width: 15, height: 15, style: "dot", question: "The Page wears an elaborate blue beret with a long flowing scarf. What does this fanciful headwear tell you about him?" },
+  { id: "hotspot-3", x: 50.0, y: 45.0, width: 15, height: 15, style: "dot", question: "His tunic is decorated with lotus blossoms. What do these flower motifs tell us about him?" },
+  { id: "hotspot-4", x: 55.0, y: 35.0, width: 15, height: 15, style: "dot", question: "What does his body language and facial expression suggest?" },
 ];
 
 document.getElementById('intro-start-btn').addEventListener('click', function() { const o = document.getElementById('intro-overlay'); o.style.transition = 'opacity 0.25s ease'; o.style.opacity = '0'; setTimeout(function() { o.style.display = 'none'; }, 260); dbg('Intro modal dismissed', 'event'); });
