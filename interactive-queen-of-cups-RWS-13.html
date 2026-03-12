@@ -57,13 +57,13 @@
 <div id="app-container"><div id="image-wrapper"><img id="base-image" src="https://rdoblak.github.io/Tarot-Thinkific-Hotspot/Cups13.jpg" alt="Interactive course image" /></div></div>
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 <script>
-const DEBUG = true;
+const DEBUG = false;
 const HOTSPOTS = [
-  { id: "hotspot-1", x: 35.0, y: 35.0, width: 15, height: 15, style: "dot", question: "The Queen holds an elaborate closed cup with ornate handles, unlike any other cup in the tarot. What does this unique, sealed vessel suggest about the nature of her inner world?" },
-  { id: "hotspot-2", x: 60.0, y: 20.0, width: 15, height: 15, style: "dot", question: "Her throne is decorated with cherubs and sea creatures. How do these oceanic motifs connect to her mastery of emotional and intuitive depths?" },
-  { id: "hotspot-3", x: 50.0, y: 50.0, width: 15, height: 15, style: "dot", question: "She gazes contemplatively at her cup with deep focus. What does this intense concentration on her own vessel suggest about introspection and emotional intelligence?" },
-  { id: "hotspot-4", x: 20.0, y: 60.0, width: 15, height: 15, style: "dot", question: "Water touches the edge of her throne at its base. What does this direct contact between her seat of power and the sea suggest about her relationship to the unconscious?" },
-  { id: "hotspot-5", x: 50.0, y: 85.0, width: 15, height: 15, style: "dot", question: "Colorful pebbles are scattered on the shore at her feet. What might these smooth, water-worn stones represent about emotions refined by time and experience?" },
+  { id: "hotspot-1", x: 35.0, y: 35.0, width: 15, height: 15, style: "dot", question: "The Queen holds an elaborate closed cup with ornate handles, unlike any other cup in the tarot. What does this unique, sealed vessel suggest?" },
+  { id: "hotspot-2", x: 60.0, y: 20.0, width: 15, height: 15, style: "dot", question: "Her throne is decorated with water nymphs. What might these creatures suggest about her?" },
+  { id: "hotspot-3", x: 50.0, y: 50.0, width: 15, height: 15, style: "dot", question: "What can you surmise about her personality based on her posture and facial expresssion?" },
+  { id: "hotspot-4", x: 52.8, y: 63.3, width: 15, height: 15, style: "dot", question: "Her cloak looks like dappled water. What might that tell you about her?" },
+  { id: "hotspot-5", x: 50.0, y: 85.0, width: 15, height: 15, style: "dot", question: "Colorful pebbles are scattered on the shore at her feet. What might these smooth, water-worn stones tell you about the energy of this card?" },
 ];
 
 document.getElementById('intro-start-btn').addEventListener('click', function() { const o = document.getElementById('intro-overlay'); o.style.transition = 'opacity 0.25s ease'; o.style.opacity = '0'; setTimeout(function() { o.style.display = 'none'; }, 260); dbg('Intro modal dismissed', 'event'); });
