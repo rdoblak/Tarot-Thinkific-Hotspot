@@ -57,13 +57,12 @@
 <div id="app-container"><div id="image-wrapper"><img id="base-image" src="https://rdoblak.github.io/Tarot-Thinkific-Hotspot/Cups06.jpg" alt="Interactive course image" /></div></div>
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 <script>
-const DEBUG = true;
+const DEBUG = false;
 const HOTSPOTS = [
-  { id: "hotspot-1", x: 42.0, y: 40.0, width: 15, height: 15, style: "dot", question: "An older child offers a cup filled with white flowers to a younger child. What might this gift of flowers in a cup represent about innocence and memory?" },
-  { id: "hotspot-2", x: 60.0, y: 55.0, width: 15, height: 15, style: "dot", question: "The smaller child looks up at the older one with trust. What does the size difference between the two figures suggest about the relationship?" },
-  { id: "hotspot-3", x: 50.0, y: 82.0, width: 15, height: 15, style: "dot", question: "Four more cups filled with flowers stand in a row in the foreground. What atmosphere of abundance and nostalgia do these create?" },
-  { id: "hotspot-4", x: 30.0, y: 20.0, width: 15, height: 15, style: "dot", question: "An old stone building with a tower rises in the background. How does this setting of an ancestral home connect to themes of the past?" },
-  { id: "hotspot-5", x: 15.0, y: 50.0, width: 15, height: 15, style: "dot", question: "A figure with a staff walks away in the far background. What might this departing figure represent about leaving childhood behind?" },
+  { id: "hotspot-1", x: 40.6, y: 53.2, width: 15, height: 15, style: "dot", question: "What can you surmise about their relationship based on their interaction?" },
+  { id: "hotspot-2", x: 60.0, y: 55.0, width: 15, height: 15, style: "dot", question: "What do you think is happening with this cup?" },
+  { id: "hotspot-3", x: 50.0, y: 82.0, width: 15, height: 15, style: "dot", question: "Four more cups filled with flowers stand in a row in the foreground. What does the shape of the flower suggest?" },
+  { id: "hotspot-4", x: 13.2, y: 36.6, width: 15, height: 15, style: "dot", question: "A figure with a staff walks away in the far background. How would you interpret his presence?" },
 ];
 
 document.getElementById('intro-start-btn').addEventListener('click', function() { const o = document.getElementById('intro-overlay'); o.style.transition = 'opacity 0.25s ease'; o.style.opacity = '0'; setTimeout(function() { o.style.display = 'none'; }, 260); dbg('Intro modal dismissed', 'event'); });
