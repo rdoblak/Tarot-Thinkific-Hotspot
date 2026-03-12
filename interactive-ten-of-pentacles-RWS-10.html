@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Interactive Image Quiz</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: transparent; }
+  #debug-panel { display: none; position: fixed; bottom: 0; left: 0; right: 0; max-height: 35vh; overflow-y: auto; background: rgba(15, 15, 25, 0.95); color: #a5f3a0; font-family: 'Courier New', monospace; font-size: 11px; line-height: 1.5; padding: 8px 12px; z-index: 10000; border-top: 2px solid #34d399; backdrop-filter: blur(6px); }
+  #debug-panel .debug-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px; border-bottom: 1px solid rgba(52, 211, 153, 0.3); margin-bottom: 6px; position: sticky; top: 0; background: rgba(15, 15, 25, 0.98); }
+  #debug-panel .debug-header span { color: #34d399; font-weight: 700; font-size: 12px; letter-spacing: 0.5px; }
+  #debug-panel .debug-header button { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #fca5a5; font-size: 10px; padding: 2px 8px; border-radius: 3px; cursor: pointer; }
+  .debug-entry { padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .debug-entry .timestamp { color: #6b7280; margin-right: 6px; }
+  .debug-entry.warn { color: #fbbf24; } .debug-entry.error { color: #f87171; } .debug-entry.info { color: #a5f3a0; } .debug-entry.event { color: #93c5fd; }
+  #app-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f5f5f5; }
+  #image-wrapper { position: relative; display: inline-block; max-width: 100%; max-height: 100%; line-height: 0; }
+  #base-image { display: block; max-width: 100%; max-height: 100vh; height: auto; object-fit: contain; }
+  .hotspot { position: absolute; cursor: pointer; z-index: 10; transition: transform 0.2s ease; }
+  .hotspot:hover { transform: scale(1.15); } .hotspot:active { transform: scale(0.95); }
+  .hotspot-dot { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 24px; line-height: 1; animation: pulse-scale 2s ease-in-out infinite; background: rgba(0, 0, 0, 0.45); border-radius: 50%; padding: 5px; border: 2px solid rgba(255, 255, 255, 0.7); }
+  .hotspot-dot::after { content: '⭐'; filter: drop-shadow(0 0 4px white); }
+  @keyframes pulse-scale { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+  .hotspot-invisible { background: transparent; border: none; box-shadow: none; animation: none; }
+  .debug-active .hotspot-invisible { background: rgba(239, 68, 68, 0.15); border: 2px dashed rgba(239, 68, 68, 0.7); }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slide-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  #intro-overlay { display: flex; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 600; align-items: center; justify-content: center; padding: 16px; animation: fade-in 0.35s ease; }
+  #intro-box { background: #ffffff; border-radius: 14px; padding: 32px 28px 24px; max-width: 400px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; animation: slide-up 0.35s ease; }
+  #intro-box .intro-icon { font-size: 40px; margin-bottom: 14px; }
+  #intro-box h2 { font-size: 20px; font-weight: 700; color: #1f2937; margin-bottom: 10px; }
+  #intro-box p { font-size: 15px; color: #6b7280; line-height: 1.6; margin-bottom: 22px; }
+  #intro-start-btn { background: #3b82f6; color: #fff; border: none; border-radius: 10px; padding: 12px 32px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.15s ease, transform 0.1s ease; }
+  #intro-start-btn:hover { background: #2563eb; } #intro-start-btn:active { transform: scale(0.97); }
+  #question-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 500; align-items: center; justify-content: center; padding: 16px; animation: fade-in 0.25s ease; }
+  #question-overlay.visible { display: flex; }
+  #question-box { background: #ffffff; border-radius: 14px; padding: 28px 24px 24px; max-width: 440px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; animation: slide-up 0.3s ease; }
+  #question-box .close-btn { position: absolute; top: 10px; right: 14px; background: none; border: none; font-size: 22px; color: #9ca3af; cursor: pointer; line-height: 1; padding: 4px; transition: color 0.15s; }
+  #question-box .close-btn:hover { color: #374151; }
+  #question-box h3 { font-size: 17px; font-weight: 700; color: #1f2937; margin-bottom: 14px; padding-right: 28px; line-height: 1.35; }
+  .answer-option { display: block; width: 100%; text-align: left; background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 10px; padding: 12px 16px; margin-bottom: 10px; font-size: 15px; color: #374151; cursor: pointer; transition: all 0.15s ease; line-height: 1.4; }
+  .answer-option:hover { background: #eff6ff; border-color: #93c5fd; }
+  .answer-option.correct { background: #ecfdf5; border-color: #34d399; color: #065f46; font-weight: 600; }
+  .answer-option.incorrect { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
+  .answer-option:disabled { cursor: default; opacity: 0.7; }
+  #feedback-text { margin-top: 14px; padding: 12px 14px; border-radius: 8px; font-size: 14px; line-height: 1.5; display: none; }
+  #feedback-text.show { display: block; }
+  #feedback-text.correct-fb { background: #ecfdf5; color: #065f46; border-left: 4px solid #34d399; }
+  #feedback-text.incorrect-fb { background: #fef2f2; color: #991b1b; border-left: 4px solid #f87171; }
+  @media (max-width: 480px) { #question-box { padding: 22px 18px 18px; border-radius: 12px; } #question-box h3 { font-size: 15px; } .answer-option { font-size: 14px; padding: 10px 14px; margin-bottom: 8px; } .hotspot-dot { width: 26px; height: 26px; font-size: 20px; } #debug-panel { font-size: 10px; max-height: 28vh; } }
+</style>
+</head>
+<body>
+<div id="debug-panel"><div class="debug-header"><span>🛠 DEBUG CONSOLE</span><button onclick="clearDebug()">Clear</button></div><div id="debug-log"></div></div>
+<div id="intro-overlay"><div id="intro-box"><div class="intro-icon">🔍</div><h2>Explore the Image</h2><p>Click on the <strong>⭐ star icons</strong> scattered across the image to discover questions and explore what's happening in the scene.</p><button id="intro-start-btn">Let's Begin</button></div></div>
+<div id="app-container"><div id="image-wrapper"><img id="base-image" src="https://rdoblak.github.io/Tarot-Thinkific-Hotspot/Pentacles10.jpg" alt="Interactive course image" /></div></div>
+<div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
+
+<script>
+const DEBUG = false;
+
+const HOTSPOTS = [
+  {
+    id: "hotspot-1",
+    x: 25.0,
+    y: 45.0,
+    width: 15,
+    height: 15,
+    style: "dot",
+    question: "An elderly man sits draped in a richly embroidered robe, surrounded by family members and dogs. He is the patriarch, the one who built the wealth now enjoyed by his descendants. What does this elder figure represent about legacy, inheritance, and the fruits of a lifetime of work?"
+  },
+  {
+    id: "hotspot-2",
+    x: 55.0,
+    y: 40.0,
+    width: 15,
+    height: 15,
+    style: "dot",
+    question: "A couple stands under an archway — perhaps the middle generation — while a small child reaches toward the dogs. Three generations are present in this single scene. What does the presence of grandparent, parents, and child suggest about how wealth and values are passed down through family lines?"
+  },
+  {
+    id: "hotspot-3",
+    x: 50.0,
+    y: 50.0,
+    width: 15,
+    height: 15,
+    style: "dot",
+    question: "Ten pentacles are arranged in the pattern of the Tree of Life from Kabbalah, overlaid across the entire scene. This sacred geometric pattern connects all the figures. What does using this mystical arrangement suggest about the spiritual dimensions of material abundance and family connection?"
+  },
+  {
+    id: "hotspot-4",
+    x: 65.0,
+    y: 25.0,
+    width: 15,
+    height: 15,
+    style: "dot",
+    question: "A grand stone archway frames the scene, with coat-of-arms banners and elaborate architecture visible. This is clearly an established estate or manor. What does this imposing architecture represent about permanent, established wealth — the kind built over generations rather than acquired quickly?"
+  },
+  {
+    id: "hotspot-5",
+    x: 35.0,
+    y: 70.0,
+    width: 15,
+    height: 15,
+    style: "dot",
+    question: "Two dogs sit contentedly at the old man's feet — symbols of loyalty, companionship, and domestic comfort. Even the animals in this scene are well-cared-for. What do these loyal companions add to the picture of a fulfilled, abundant life? Is material wealth enough, or does true richness require loyal bonds?"
+  },
+];
+
+document.getElementById('intro-start-btn').addEventListener('click', function() { const introOverlay = document.getElementById('intro-overlay'); introOverlay.style.transition = 'opacity 0.25s ease'; introOverlay.style.opacity = '0'; setTimeout(function() { introOverlay.style.display = 'none'; }, 260); dbg('Intro modal dismissed', 'event'); });
+const debugPanel = document.getElementById('debug-panel'); const debugLog = document.getElementById('debug-log');
+function dbg(message, level = 'info') { if (!DEBUG) return; const now = new Date(); const ts = now.toLocaleTimeString('en-US', { hour12: false }) + '.' + String(now.getMilliseconds()).padStart(3,'0'); const entry = document.createElement('div'); entry.className = `debug-entry ${level}`; entry.innerHTML = `<span class="timestamp">[${ts}]</span> ${message}`; debugLog.appendChild(entry); debugLog.scrollTop = debugLog.scrollHeight; const consoleFn = level === 'error' ? console.error : level === 'warn' ? console.warn : console.log; consoleFn(`[InteractiveImage ${level.toUpperCase()}] ${message}`); }
+function clearDebug() { debugLog.innerHTML = ''; dbg('Debug log cleared', 'info'); }
+if (DEBUG) { debugPanel.style.display = 'block'; document.getElementById('app-container').classList.add('debug-active'); dbg('Debug mode ENABLED — click anywhere on the image to log coordinates', 'warn'); dbg(`Loaded ${HOTSPOTS.length} hotspot(s)`, 'info'); }
+const baseImage = document.getElementById('base-image'); const imageWrapper = document.getElementById('image-wrapper');
+function renderHotspots() { document.querySelectorAll('.hotspot').forEach(el => el.remove()); HOTSPOTS.forEach((hs, i) => { const el = document.createElement('div'); el.className = `hotspot ${hs.style === 'invisible' ? 'hotspot-invisible' : 'hotspot-dot'}`; el.dataset.index = i; el.setAttribute('role', 'button'); el.setAttribute('aria-label', `Question hotspot ${i + 1}`); el.setAttribute('tabindex', '0'); const w = hs.width || 32; const h = hs.height || 32; el.style.width = w + 'px'; el.style.height = h + 'px'; el.style.left = `calc(${hs.x}% - ${w / 2}px)`; el.style.top = `calc(${hs.y}% - ${h / 2}px)`; el.addEventListener('click', (e) => { e.stopPropagation(); dbg(`Hotspot "${hs.id}" clicked`, 'event'); openQuestion(i); }); el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); openQuestion(i); } }); imageWrapper.appendChild(el); dbg(`Registered hotspot "${hs.id}" at (${hs.x}%, ${hs.y}%) — style: ${hs.style}, size: ${w}x${h}`, 'info'); }); }
+if (baseImage.complete) { dbg('Image already cached — rendering hotspots immediately', 'info'); renderHotspots(); } else { baseImage.addEventListener('load', () => { dbg(`Image loaded: ${baseImage.naturalWidth}x${baseImage.naturalHeight}`, 'info'); renderHotspots(); }); baseImage.addEventListener('error', () => { dbg('IMAGE FAILED TO LOAD — check your src URL!', 'error'); }); }
+window.addEventListener('resize', () => { dbg('Window resized — re-rendering hotspots', 'info'); renderHotspots(); });
+imageWrapper.addEventListener('click', (e) => { if (!DEBUG) return; const rect = imageWrapper.getBoundingClientRect(); const xPct = ((e.clientX - rect.left) / rect.width * 100).toFixed(1); const yPct = ((e.clientY - rect.top) / rect.height * 100).toFixed(1); dbg(`📍 Click at <b>x: ${xPct}%</b>, <b>y: ${yPct}%</b> — use these values in HOTSPOTS config`, 'event'); });
+const overlay = document.getElementById('question-overlay'); const qText = document.getElementById('q-text'); const qAnswers = document.getElementById('q-answers'); const feedbackText = document.getElementById('feedback-text');
+function openQuestion(index) { const hs = HOTSPOTS[index]; dbg(`Opening question for "${hs.id}": "${hs.question}"`, 'info'); qText.textContent = hs.question; qAnswers.innerHTML = ''; feedbackText.className = ''; feedbackText.textContent = ''; feedbackText.style.display = 'none'; if (hs.answers && hs.answers.length > 0) { hs.answers.forEach((ans, ai) => { const btn = document.createElement('button'); btn.className = 'answer-option'; btn.textContent = ans.text; btn.addEventListener('click', () => handleAnswer(index, ai)); qAnswers.appendChild(btn); }); } overlay.classList.add('visible'); }
+function handleAnswer(hsIndex, ansIndex) { const hs = HOTSPOTS[hsIndex]; const ans = hs.answers[ansIndex]; const buttons = qAnswers.querySelectorAll('.answer-option'); dbg(`Answer selected: "${ans.text}" — ${ans.correct ? '✅ CORRECT' : '❌ INCORRECT'}`, ans.correct ? 'info' : 'warn'); buttons.forEach((btn, i) => { btn.disabled = true; if (i === ansIndex) btn.classList.add(ans.correct ? 'correct' : 'incorrect'); if (!ans.correct && hs.answers[i].correct) btn.classList.add('correct'); }); feedbackText.textContent = ans.feedback; feedbackText.className = `show ${ans.correct ? 'correct-fb' : 'incorrect-fb'}`; feedbackText.style.display = 'block'; }
+function closeQuestion() { overlay.classList.remove('visible'); dbg('Question modal closed', 'event'); }
+overlay.addEventListener('click', (e) => { if (e.target === overlay) closeQuestion(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeQuestion(); });
+function sendHeight() { const h = document.documentElement.scrollHeight; window.parent.postMessage({ type: 'resize', height: h }, '*'); dbg(`Sent height to parent: ${h}px`, 'info'); }
+window.addEventListener('load', () => setTimeout(sendHeight, 200)); window.addEventListener('resize', sendHeight); baseImage.addEventListener('load', () => setTimeout(sendHeight, 100));
+dbg('Interactive Image Quiz initialized ✓', 'info');
+</script>
+</body>
+</html>
