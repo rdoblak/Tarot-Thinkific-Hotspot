@@ -59,11 +59,8 @@
 <script>
 const DEBUG = false;
 const HOTSPOTS = [
-  { id: "hotspot-1", x: 50.0, y: 20.0, width: 15, height: 15, style: "dot", question: "Nine golden cups are arranged in a proud arc on a curved shelf behind the figure. What does this impressive display suggest about the man's achievements?" },
-  { id: "hotspot-2", x: 50.0, y: 55.0, width: 15, height: 15, style: "dot", question: "The well-fed man sits with arms crossed and a satisfied smile. Why is this card traditionally known as 'the wish card'?" },
-  { id: "hotspot-3", x: 50.0, y: 40.0, width: 15, height: 15, style: "dot", question: "He wears a red hat or beret and fine clothing. What do these signs of material comfort tell us about his relationship to pleasure and abundance?" },
-  { id: "hotspot-4", x: 25.0, y: 45.0, width: 15, height: 15, style: "dot", question: "A draped cloth or curtain hangs behind him. What does this theatrical backdrop suggest about the nature of the satisfaction being displayed?" },
-  { id: "hotspot-5", x: 75.0, y: 45.0, width: 15, height: 15, style: "dot", question: "He sits alone on a wooden bench with no companions in sight. Is this solitary contentment truly fulfilling, or might something be missing?" },
+  { id: "hotspot-1", x: 50.0, y: 20.0, width: 15, height: 15, style: "dot", question: "Nine golden cups are arranged in an arc on a curved shelf behind the figure. What does this display suggest to you?" },
+  { id: "hotspot-2", x: 50.0, y: 55.0, width: 15, height: 15, style: "dot", question: "The man sits with arms crossed and a slight smile. What can you surmise about him based on his expresion and demeanor?" },
 ];
 
 document.getElementById('intro-start-btn').addEventListener('click', function() { const o = document.getElementById('intro-overlay'); o.style.transition = 'opacity 0.25s ease'; o.style.opacity = '0'; setTimeout(function() { o.style.display = 'none'; }, 260); dbg('Intro modal dismissed', 'event'); });
