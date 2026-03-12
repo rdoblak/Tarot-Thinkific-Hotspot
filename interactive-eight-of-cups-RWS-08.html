@@ -57,13 +57,12 @@
 <div id="app-container"><div id="image-wrapper"><img id="base-image" src="https://rdoblak.github.io/Tarot-Thinkific-Hotspot/Cups08.jpg" alt="Interactive course image" /></div></div>
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 <script>
-const DEBUG = true;
+const DEBUG = false;
 const HOTSPOTS = [
-  { id: "hotspot-1", x: 60.0, y: 42.0, width: 15, height: 15, style: "dot", question: "A cloaked figure walks away from eight neatly stacked cups, heading toward distant mountains. What does this deliberate departure suggest about emotional choice?" },
-  { id: "hotspot-2", x: 35.0, y: 22.0, width: 15, height: 15, style: "dot", question: "An eclipsed moon with a face looks down on the scene. What does this celestial symbol suggest about the emotional timing of this journey?" },
-  { id: "hotspot-3", x: 40.0, y: 72.0, width: 15, height: 15, style: "dot", question: "Eight cups are stacked in two rows with a gap in the top row. What might this missing space in an otherwise complete arrangement represent?" },
-  { id: "hotspot-4", x: 65.0, y: 55.0, width: 15, height: 15, style: "dot", question: "The figure carries a walking staff and heads toward rocky terrain. What does this suggest about the difficulty of the path they are choosing?" },
-  { id: "hotspot-5", x: 50.0, y: 60.0, width: 15, height: 15, style: "dot", question: "A river or body of water separates the cups from the mountains. What emotional boundary might this water symbolize between past and future?" },
+  { id: "hotspot-1", x: 60.0, y: 42.0, width: 15, height: 15, style: "dot", question: "Contrast the background with the foreground. What do you think their differences mean?" },
+  { id: "hotspot-2", x: 35.0, y: 22.0, width: 15, height: 15, style: "dot", question: "What does the presence of the Moon suggest about this card?" },
+  { id: "hotspot-3", x: 40.0, y: 72.0, width: 15, height: 15, style: "dot", question: "Eight cups are stacked in two rows with a gap in the top row. What is happening to them in the scene?" },
+  { id: "hotspot-4", x: 65.0, y: 55.0, width: 15, height: 15, style: "dot", question: "What can you surmise about this figure based on his dress and behavior?" },
 ];
 
 document.getElementById('intro-start-btn').addEventListener('click', function() { const o = document.getElementById('intro-overlay'); o.style.transition = 'opacity 0.25s ease'; o.style.opacity = '0'; setTimeout(function() { o.style.display = 'none'; }, 260); dbg('Intro modal dismissed', 'event'); });
