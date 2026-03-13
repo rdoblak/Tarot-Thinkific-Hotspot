@@ -58,17 +58,17 @@
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 
 <script>
-const DEBUG = true;
+const DEBUG = false;
 
 const HOTSPOTS = [
   {
     id: "hotspot-1",
-    x: 35.0,
-    y: 60.0,
+    x: 60.2,
+    y: 57.7,
     width: 15,
     height: 15,
     style: "dot",
-    question: "Thse two figures trudge through snow. One is on crutches, bandaged and injured. The other is barefoot and wrapped in a thin shawl. What does their appearance tell you about this card?"
+    question: "Thse two figures trudge through snow. One is on crutches. The other is barefoot and hunched in a thin shawl. What does their appearance tell you about this card?"
   },
   {
     id: "hotspot-2",
@@ -77,34 +77,25 @@ const HOTSPOTS = [
     width: 15,
     height: 15,
     style: "dot",
-    question: "A brightly lit stained glass window glows with warmth above the figures, depicting five pentacles in its design. This window belongs to a church or place of sanctuary. The figures walk right past it without looking up. What does their failure to notice or seek this shelter say about how hardship can blind us to available help?"
+    question: "A brightly lit stained glass window glows with five pentacles in its design. What do you think it means that the pentacles are now in the stained glass? How might it relate to the Gothic pentacles in the Three of Pentacles? What other Major Arcana card is alluded to?"
   },
   {
     id: "hotspot-3",
-    x: 25.0,
-    y: 45.0,
+    x: 35.0,
+    y: 60.0,
     width: 15,
     height: 15,
     style: "dot",
-    question: "One figure walks on crutches with a bell around their neck — historically a sign used to identify lepers or outcasts. This person bears visible signs of illness and social exclusion. How does physical suffering compound the experience of financial hardship?"
+    question: "The bell and bandages give you a clue to what malady this figure has. Do you know what it is?"
   },
   {
     id: "hotspot-4",
-    x: 50.0,
-    y: 80.0,
+    x: 9.1,
+    y: 43.4,
     width: 15,
     height: 15,
     style: "dot",
-    question: "Snow falls around the figures, covering the ground in white. Winter and cold are powerful symbols of scarcity and emotional isolation. How does this frozen landscape reinforce the card's themes of material and spiritual poverty?"
-  },
-  {
-    id: "hotspot-5",
-    x: 55.0,
-    y: 50.0,
-    width: 15,
-    height: 15,
-    style: "dot",
-    question: "Despite their hardship, the two figures walk together — they have not abandoned each other. There is companionship even in misery. What does this companionship suggest about the human need for connection during times of loss, and how might mutual support be a form of wealth in itself?"
+    question: "Snow falls around the figures, covering the ground in white. What other Major Arcana card featured snow? How might that inform the meaning of the setting of this card?"
   },
 ];
 
