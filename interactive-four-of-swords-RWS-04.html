@@ -58,31 +58,31 @@
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 
 <script>
-const DEBUG = true;
+const DEBUG = false;
 
 const HOTSPOTS = [
   {
     id: "hotspot-1",
     x: 50.0,
-    y: 45.0,
+    y: 63.5,
     width: 15,
     height: 15,
     style: "dot",
-    question: "A knight lies in repose on a stone tomb or effigy, hands clasped in prayer. This figure appears to be resting rather than dead. What does this posture of peaceful stillness suggest about the role of retreat and contemplation after conflict?"
+    question: "An effigy of a knight in repose lies on the slightly open lid of a sarcophagus. What meaning does the effigy and open sarcophagous hold?"
   },
   {
     id: "hotspot-2",
-    x: 35.0,
+    x: 68.4,
     y: 20.0,
     width: 15,
     height: 15,
     style: "dot",
-    question: "Three swords hang on the wall above the resting figure. These swords are displayed but not in use. What might it mean that the weapons are set aside — is this a choice to pause from mental struggle, or something else?"
+    question: "Three swords hang on the wall above the resting figure. What might that mean? How does this card relate to the previous one?"
   },
   {
     id: "hotspot-3",
-    x: 55.0,
-    y: 55.0,
+    x: 50.0,
+    y: 85.0,
     width: 15,
     height: 15,
     style: "dot",
@@ -95,16 +95,7 @@ const HOTSPOTS = [
     width: 15,
     height: 15,
     style: "dot",
-    question: "A stained glass window depicts a figure offering a blessing or gift. Stained glass is associated with sacred spaces and spiritual insight. How does this church-like setting transform the act of rest into something more meaningful?"
-  },
-  {
-    id: "hotspot-5",
-    x: 50.0,
-    y: 85.0,
-    width: 15,
-    height: 15,
-    style: "dot",
-    question: "The overall scene takes place in a quiet, enclosed space — a church or chapel. There is no landscape, no sky, no other figures. How does this sense of enclosure and solitude reflect the card's message about voluntary withdrawal and mental recovery?"
+    question: "A stained glass window depicts a figure offering a blessing or gift. How does this church-like setting inform the energy of this card?"
   },
 ];
 
