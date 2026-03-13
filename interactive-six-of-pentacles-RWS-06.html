@@ -58,26 +58,26 @@
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 
 <script>
-const DEBUG = true;
+const DEBUG = false;
 
 const HOTSPOTS = [
   {
     id: "hotspot-1",
     x: 50.0,
-    y: 35.0,
+    y: 38.0,
     width: 15,
     height: 15,
     style: "dot",
-    question: "A wealthy merchant stands in the center, distributing coins to kneeling figures below him. He holds a balanced scale in one hand. What does the act of giving while holding scales suggest about generosity guided by fairness and measured judgment?"
+    question: "This man wears a decorative hat and ornate coat. What does his dress and demeanor tell you about him?"
   },
   {
     id: "hotspot-2",
-    x: 40.0,
-    y: 25.0,
+    x: 83.2,
+    y: 40.2,
     width: 15,
     height: 15,
     style: "dot",
-    question: "The merchant holds a set of balanced scales — the same symbol associated with justice and Libra. Why might the artist include scales in a scene of charity? Is this about equal giving, or about weighing who deserves help and how much?"
+    question: "He holds a set of scales in his hand. What other card featured a set of scales? How might that inform the meaning of this card?"
   },
   {
     id: "hotspot-3",
@@ -86,25 +86,16 @@ const HOTSPOTS = [
     width: 15,
     height: 15,
     style: "dot",
-    question: "Two figures kneel before the merchant, hands raised to receive coins. They are in a position of supplication and dependence. What power dynamics are at play when one person stands and gives while others kneel and receive? Is this purely generous, or does it also establish a hierarchy?"
+    question: "Two figures kneel before the merchant, hands raised. What similarities or differences do you perceive in them? How would you interpret that?"
   },
   {
     id: "hotspot-4",
-    x: 50.0,
-    y: 15.0,
+    x: 26.3,
+    y: 50.3,
     width: 15,
     height: 15,
     style: "dot",
-    question: "Six pentacles float in the air above the scene, arranged symmetrically. These coins hover between the giver and receivers, as if in the process of being distributed. What does this suspended state of the pentacles suggest about the flow and circulation of wealth?"
-  },
-  {
-    id: "hotspot-5",
-    x: 55.0,
-    y: 50.0,
-    width: 15,
-    height: 15,
-    style: "dot",
-    question: "The merchant is dressed in fine robes, clearly prosperous, while the kneeling figures wear tattered clothing. This visual contrast between wealth and poverty is striking. How does this image challenge you to think about your own position — are you more often the giver or the receiver, and how does that shape your experience?"
+    question: "Six pentacles float in the air above the scene while smaller coins fall from the hand of the man in red. His fingers make a sign of blessing. What can you surmise is happening with the coins?"
   },
 ];
 
