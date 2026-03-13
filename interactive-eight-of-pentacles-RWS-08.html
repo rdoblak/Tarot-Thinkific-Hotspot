@@ -58,26 +58,26 @@
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 
 <script>
-const DEBUG = true;
+const DEBUG = false;
 
 const HOTSPOTS = [
   {
     id: "hotspot-1",
-    x: 55.0,
-    y: 45.0,
+    x: 45.0,
+    y: 60.0,
     width: 15,
     height: 15,
     style: "dot",
-    question: "A craftsman sits at his workbench, carefully chiseling a pentacle with focused concentration. He is completely absorbed in his task. What does this deep focus and dedication to a single craft suggest about the path to mastery and skill development?"
+    question: "A craftsman sits at his workbench, hunched over a project. What does his posture say about his attitude and mindset?"
   },
   {
     id: "hotspot-2",
-    x: 30.0,
-    y: 40.0,
+    x: 77.6,
+    y: 33.9,
     width: 15,
     height: 15,
     style: "dot",
-    question: "Six completed pentacles hang in a vertical line on a post or tree beside the craftsman, each one identical and well-made. These finished pieces represent his accumulated body of work. What does this display of consistent, repeated effort tell you about how expertise is built over time?"
+    question: "Six pentacles hang in a vertical line on a post beside the craftsman, each one identical. What is the meaning of so many identical pentacles in this workroom?"
   },
   {
     id: "hotspot-3",
@@ -86,25 +86,16 @@ const HOTSPOTS = [
     width: 15,
     height: 15,
     style: "dot",
-    question: "The craftsman's tools — hammer and chisel — are clearly visible as he works on the pentacle in his hands. These are simple, humble instruments. What does the use of basic tools to create something valuable suggest about the relationship between skill and equipment?"
+    question: "In the previous card, the pentacles were growing on a bush. In this one, they are being chiseled. How does that change the meaning of the Pentacles? Which other card is connected with carving pentacles?"
   },
   {
     id: "hotspot-4",
-    x: 20.0,
-    y: 75.0,
+    x: 31.2,
+    y: 85.7,
     width: 15,
     height: 15,
     style: "dot",
-    question: "A town or city is visible in the distant background, but the craftsman works alone, apart from it. He has separated himself to focus on his craft. What does this physical distance from the community suggest about the solitary nature of developing deep expertise?"
-  },
-  {
-    id: "hotspot-5",
-    x: 45.0,
-    y: 20.0,
-    width: 15,
-    height: 15,
-    style: "dot",
-    question: "The eighth pentacle — the one currently being worked on — is still in progress. It is not yet finished, showing the work mid-creation. What does catching the craftsman in the act of making, rather than admiring finished work, tell you about the card's emphasis on process over product?"
+    question: "An eighth pentacle is under the bench. What might it mean that this one is separate from the rest?"
   },
 ];
 
