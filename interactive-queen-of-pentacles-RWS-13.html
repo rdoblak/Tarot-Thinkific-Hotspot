@@ -58,53 +58,80 @@
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 
 <script>
-const DEBUG = true;
+const DEBUG = false;
 
 const HOTSPOTS = [
   {
     id: "hotspot-1",
-    x: 50.0,
-    y: 45.0,
+    x: 39.9,
+    y: 43.7,
     width: 15,
     height: 15,
     style: "dot",
-    question: "The Queen sits on a stone throne, cradling a large golden pentacle in her lap. She holds it gently, almost tenderly, as one might hold a child. What does this nurturing relationship with wealth suggest about how the Queen of Pentacles approaches material resources — as something to care for and cultivate rather than hoard or spend?"
+    question: "The Queen cradles a large pentacle in her lap. What can you gather about her personality and attitude towards the pentacle based on this?"
   },
   {
     id: "hotspot-2",
-    x: 30.0,
-    y: 70.0,
+    x: 89.6,
+    y: 73.1,
     width: 15,
     height: 15,
     style: "dot",
-    question: "A rabbit sits at the Queen's feet, partially hidden in the foliage. Rabbits symbolize fertility, abundance, and the natural cycles of growth. What does this small creature add to the Queen's symbolism of nurturing prosperity and connection to the earth's rhythms?"
+    question: "A rabbit sits at the Queen's feet. What is the symbolic significance of the rabbit and how does it inform your understanding of the Queen?"
   },
   {
     id: "hotspot-3",
-    x: 50.0,
-    y: 25.0,
+    x: 73.7,
+    y: 18.9.0,
     width: 15,
     height: 15,
     style: "dot",
-    question: "The Queen's throne is adorned with carved figures and surrounded by flowering roses and lush vegetation. Every surface blooms with life. What does this abundance of natural beauty surrounding her throne tell you about creating an environment where both beauty and prosperity can flourish?"
+    question: "The Queen's throne is adorned with carved figures and carved fruit. What do these adornments suggest about her?"
   },
   {
     id: "hotspot-4",
-    x: 70.0,
-    y: 50.0,
+    x: 16.8,
+    y: 10.6,
     width: 15,
     height: 15,
     style: "dot",
-    question: "The landscape around the Queen is vibrant and green — trees, flowers, and fertile ground stretch in every direction. This is clearly a well-tended, thriving domain. How does this lush environment reflect the Queen's ability to create abundance wherever she goes?"
+    question: "The landscape around the Queen is vibrant and green, trees, flowers, and fertile ground stretch in every direction. What does this abundant growth tell you about her?"
   },
   {
     id: "hotspot-5",
-    x: 45.0,
-    y: 60.0,
+    x: 53.6,
+    y: 37.1,
     width: 15,
     height: 15,
     style: "dot",
-    question: "The Queen wears a rich red robe over a white gown, combining passion and purity. Her clothing is luxurious but practical — she looks both regal and approachable. What does this blend of elegance and warmth suggest about someone who has achieved material success without losing their connection to others?"
+    question: "The Queen wears a rich red robe over a white gown, with a long green veil. What does her manner of dress tell you?"
+  },
+  {
+    id: "hotspot-6",
+    x: 68.0,
+    y: 58.8,
+    width: 15,
+    height: 15,
+    style: "dot",
+    question: "The arm of her throne has a goat's head carving. What does that add to your understanding of the card?"
+  },
+ {
+    id: "hotspot-7",
+    x: 13.2,
+    y: 71.8,
+    width: 15,
+    height: 15,
+    style: "dot",
+    question: "How many seasons do you see represented in this card?"
+  },
+ {
+    id: "hotspot-8",
+    x: 13.7,
+    y: 47.4,
+    width: 15,
+    height: 15,
+    style: "dot",
+    question: "What is the significance of snow-capped mountains in the distance?"
   },
 ];
 
