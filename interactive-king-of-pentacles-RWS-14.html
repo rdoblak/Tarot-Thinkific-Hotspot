@@ -58,7 +58,7 @@
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 
 <script>
-const DEBUG = true;
+const DEBUG = false;
 
 const HOTSPOTS = [
   {
@@ -68,43 +68,52 @@ const HOTSPOTS = [
     width: 15,
     height: 15,
     style: "dot",
-    question: "The King sits on a dark throne adorned with bull carvings — the bull being the symbol of Taurus and the earth element. He holds a pentacle on his knee with one hand and a scepter in the other. What does this combination of wealth and authority suggest about someone who has mastered the material world?"
+    question: "The King wears an elaborate robe with grape motifs. The red has moved to his cowl. He sits gazing down at the pentacle that rests on his knee, one hand on top of the pentacle. What does his clothing and demeanor suggest about his energy and character?"
   },
   {
     id: "hotspot-2",
-    x: 50.0,
-    y: 20.0,
+    x: 33.4,
+    y: 37.4,
     width: 15,
     height: 15,
     style: "dot",
-    question: "The King's throne is elaborately carved with bull heads and grapevines — symbols of earth, fertility, and abundance. This is not a simple chair but a monument to material success. What does the permanence and weight of this stone throne suggest about established, enduring wealth?"
+    question: "The King's throne is elaborately carved with bull heads and grapevines. What do these decorative elements symbolize about him?"
   },
   {
     id: "hotspot-3",
-    x: 50.0,
-    y: 60.0,
-    width: 15,
-    height: 15,
-    style: "dot",
-    question: "The King wears a robe covered in grape and vine motifs, with armor visible underneath. He is both a ruler of abundance and a warrior who has fought for what he has. What does this combination of luxury robes over armor tell you about the King's journey — prosperity built through effort and protection?"
-  },
-  {
-    id: "hotspot-4",
-    x: 25.0,
-    y: 35.0,
-    width: 15,
-    height: 15,
-    style: "dot",
-    question: "A castle or fortified estate is visible in the background, surrounded by well-tended gardens and grounds. This is the King's domain — built, maintained, and prosperous. What does this established estate represent about the ultimate achievement of the Pentacles suit — not just wealth, but a lasting legacy?"
-  },
-  {
-    id: "hotspot-5",
     x: 70.0,
     y: 70.0,
     width: 15,
     height: 15,
     style: "dot",
-    question: "Lush gardens and grapevines surround the King's throne, with everything in full bloom. The natural world thrives under his stewardship. How does the King of Pentacles represent the ideal relationship with material wealth — one of responsible stewardship where abundance benefits the entire kingdom?"
+    question: "The King's foot reveals he has armor on underneath his robe. How is this different from the other Kings? What do you think the armor means?"
+  },
+  {
+    id: "hotspot-4",
+    x: 87.6,
+    y: 35.2,
+    width: 15,
+    height: 15,
+    style: "dot",
+    question: "A castle or fortified estate is visible in the background. What does this estate represent? How do the red rooves relate to the red in his cowl?"
+  },
+  {
+    id: "hotspot-5",
+    x: 6.5,
+    y: 68.3,
+    width: 15,
+    height: 15,
+    style: "dot",
+    question: "Lush gardens and grapevines surround the King's throne, with everything in full bloom. What does that tell you about the energy of this card?"
+  },
+  {
+    id: "hotspot-6",
+    x: 80.4,
+    y: 82.6,
+    width: 15,
+    height: 15,
+    style: "dot",
+    question: "He rests his foot on a boar's head. What does that symbolize?"
   },
 ];
 
