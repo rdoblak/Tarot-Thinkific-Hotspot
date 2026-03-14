@@ -58,53 +58,62 @@
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 
 <script>
-const DEBUG = true;
+const DEBUG = false;
 
 const HOTSPOTS = [
   {
     id: "hotspot-1",
-    x: 55.0,
-    y: 25.0,
+    x: 53.8,
+    y: 50.4,
     width: 15,
     height: 15,
     style: "dot",
-    question: "The Queen holds her sword upright in her right hand, the blade pointing straight up toward the sky. Unlike the Knight who charges forward, she holds the sword still and vertical. What does this upright, steady grip suggest about how she wields her intellect — with precision and deliberation rather than aggression?"
+    question: "The Queen holds her sword upright in her right hand, the blade pointing straight up toward the sky. What does her manner of holding the sword tell you about her?"
   },
   {
     id: "hotspot-2",
-    x: 35.0,
-    y: 45.0,
+    x: 66.2,
+    y: 37.7,
     width: 15,
     height: 15,
     style: "dot",
-    question: "The Queen extends her left hand outward, palm open, as if beckoning or offering. This gesture of the non-sword hand suggests receptivity alongside her sharp intellect. What balance between cutting truth and compassionate understanding might this dual gesture represent?"
+    question: "The Queen extends her left hand outward, palm open. What does this gesture suggest about her?"
   },
   {
     id: "hotspot-3",
-    x: 50.0,
-    y: 35.0,
+    x: 29.3,
+    y: 30.8,
     width: 15,
     height: 15,
     style: "dot",
-    question: "The Queen sits in profile, facing to the right, with a stern or serious expression. Her face shows no warmth or sentimentality. How does this resolute, no-nonsense demeanor reflect the Queen's mastery of intellectual clarity and emotional boundaries?"
+    question: "What does the Queen's facial expression and demeanor tell you about her personality? How is that informed by the butterfly crown and red veil she wears?"
   },
   {
     id: "hotspot-4",
-    x: 50.0,
-    y: 10.0,
+    x: 11.6,
+    y: 85.3,
     width: 15,
     height: 15,
     style: "dot",
-    question: "A single bird flies high in the clear sky above the Queen. Birds represent thoughts and mental freedom throughout the Swords suit. What does this solitary bird suggest about the Queen's relationship with her thoughts — mastery, independence, or perhaps loneliness?"
+    question: "Her train looks like a rivulet flowing away at the bottom. What are your thoughts on why that is?"
   },
   {
     id: "hotspot-5",
-    x: 45.0,
-    y: 65.0,
+    x: 39.0,
+    y: 67.2,
     width: 15,
     height: 15,
     style: "dot",
-    question: "The Queen's stone throne is decorated with carved cherubs and butterflies — symbols of the air element and spiritual messengers. Her throne also sits high above the landscape. How do these carvings and the elevated position reinforce her connection to higher thought and clear perception?"
+    question: "The Queen's stone throne is decorated with carved cherubs, crescent moons, and butterflies. What do these decorative motifs tell you about the energy of this card?"
+  },
+ {
+    id: "hotspot-6",
+    x: 9.7,
+    y: 67.4,
+    width: 15,
+    height: 15,
+    style: "dot",
+    question: "What is the wind doing in the background? What does that suggest about the nature of this card?"
   },
 ];
 
