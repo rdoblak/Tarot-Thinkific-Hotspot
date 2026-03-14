@@ -61,8 +61,8 @@ const DEBUG = false;
 const HOTSPOTS = [
   { id: "hotspot-1", x: 50.0, y: 12.0, width: 15, height: 15, style: "dot", question: "A winged lion head rises above a caduceus between the two figures. What two cards does this combine from the Major Arcana?" },
   { id: "hotspot-2", x: 51.9, y: 27.3, width: 15, height: 15, style: "dot", question: "What might the presence of the caduceus mean in this image?" },
-  { id: "hotspot-3", x: 70.0, y: 45.0, width: 15, height: 15, style: "dot", question: "What can you surmise based on the faces and demeanors of these people?" },
-  { id: "hotspot-4", x: 50.0, y: 50.0, width: 15, height: 15, style: "dot", question: "Both figures extend cups toward each other in a mutual gesture. What does this equal exchange of cups symbolize about emotional reciprocity?" },
+  { id: "hotspot-3", x: 70.0, y: 45.0, width: 15, height: 15, style: "dot", question: "The two figures face each other, one reaching forward to touch the hand of the other. What can you surmise about their feelings and relationship based on this?" },
+  { id: "hotspot-4", x: 50.0, y: 50.0, width: 15, height: 15, style: "dot", question: "Both figures extend cups toward each other in a mutual gesture. What does this exchange symbolize?" },
 ];
 
 document.getElementById('intro-start-btn').addEventListener('click', function() { const o = document.getElementById('intro-overlay'); o.style.transition = 'opacity 0.25s ease'; o.style.opacity = '0'; setTimeout(function() { o.style.display = 'none'; }, 260); dbg('Intro modal dismissed', 'event'); });
