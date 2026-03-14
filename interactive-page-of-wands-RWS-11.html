@@ -58,17 +58,17 @@
 <div id="question-overlay"><div id="question-box"><button class="close-btn" onclick="closeQuestion()" aria-label="Close">&times;</button><h3 id="q-text"></h3><div id="q-answers"></div><div id="feedback-text"></div></div></div>
 
 <script>
-const DEBUG = true;
+const DEBUG = false;
 
 const HOTSPOTS = [
   {
     id: "hotspot-1",
-    x: 55.0,
-    y: 20.0,
+    x: 71.1,
+    y: 25.1,
     width: 15,
     height: 15,
     style: "dot",
-    question: "The Page gazes upward at the sprouting wand he holds, as if fascinated by its potential. What does this upward gaze suggest about the Page's relationship to creativity and inspiration?"
+    question: "The Page gazes upward at the wand he holds. What do you think his attitude towards the wand is?"
   },
   {
     id: "hotspot-2",
@@ -77,34 +77,34 @@ const HOTSPOTS = [
     width: 15,
     height: 15,
     style: "dot",
-    question: "The Page wears an elaborately patterned tunic decorated with salamander motifs. Salamanders are traditionally associated with fire. What does this connection reinforce about the Wands suit?"
+    question: "The Page wears an elaborately patterned tunic decorated with salamander motifs. Do you know any lore associated with salamanders that might explain its symbolic significance here?"
   },
   {
     id: "hotspot-3",
-    x: 48.0,
-    y: 30.0,
+    x: 34.6,
+    y: 17.4,
     width: 15,
     height: 15,
     style: "dot",
-    question: "He wears a hat with a feather, giving him a jaunty, adventurous appearance. What does this confident accessory tell us about the Page's attitude toward the journey ahead?"
+    question: "He wears a hat with a feather. What does the feather in his cap remind you of?"
   },
   {
     id: "hotspot-4",
-    x: 50.0,
-    y: 80.0,
+    x: 80.8,
+    y: 71.7,
     width: 15,
     height: 15,
     style: "dot",
-    question: "The Page stands in a barren desert landscape with pyramids or mountains in the distance. What does this arid, open terrain suggest about the stage of his creative journey?"
+    question: "The Page stands in a barren desert landscape with pyramids or mountains in the distance. What does the background tell you about the energy of this card?"
   },
   {
     id: "hotspot-5",
-    x: 50.0,
-    y: 60.0,
+    x: 37.7,
+    y: 24.4,
     width: 15,
     height: 15,
-    style: "dot",
-    question: "As the first court card of the Wands suit, the Page represents the most youthful expression of fire energy. How does he differ from the Knight, Queen, and King who follow?"
+    style: "dot"
+    question: "What does his facial expression and appearance tell you about his personality?"
   },
 ];
 
