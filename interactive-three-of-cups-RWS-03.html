@@ -61,7 +61,7 @@ const DEBUG = false;
 const HOTSPOTS = [
   { id: "hotspot-1", x: 50.0, y: 15.0, width: 15, height: 15, style: "dot", question: "What kind of celebration or shared joy might this gesture represent?" },
   { id: "hotspot-2", x: 30.0, y: 45.0, width: 15, height: 15, style: "dot", question: "The women are adorned with garlands and flowing robes. How do their intertwined poses suggest the nature of their bond?" },
-  { id: "hotspot-3", x: 70.0, y: 70.0, width: 15, height: 15, style: "dot", question: "Fruits and vegetables are scattered on the ground around them. What does this harvest imagery tell us about this card?" },
+  { id: "hotspot-3", x: 70.0, y: 85.0, width: 15, height: 15, style: "dot", question: "Fruits and vegetables are scattered on the ground around them. What does this harvest imagery tell us about this card?" },
 ];
 
 document.getElementById('intro-start-btn').addEventListener('click', function() { const o = document.getElementById('intro-overlay'); o.style.transition = 'opacity 0.25s ease'; o.style.opacity = '0'; setTimeout(function() { o.style.display = 'none'; }, 260); dbg('Intro modal dismissed', 'event'); });
